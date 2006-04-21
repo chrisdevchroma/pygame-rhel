@@ -14,6 +14,8 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  python-devel python-numeric
 BuildRequires:  SDL_ttf-devel SDL_image-devel SDL_mixer-devel
 Requires:       python-numeric
+Obsoletes:      python-pygame < 1.7.1
+Provides:       python-pygame = %{version}-%{release}
 
 %description
 Pygame is a set of Python modules designed for writing games. It is
@@ -25,7 +27,7 @@ operating system.
 %package devel
 Summary:        Files needed for developing programs which use pygame
 Group:          Development/Libraries
-Requires:       %{name} == %{version}-%{release}
+Requires:       %{name} = %{version}-%{release}
 
 %description devel
 This package contains headers required to build applications that use
