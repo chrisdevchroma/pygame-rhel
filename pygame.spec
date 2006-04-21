@@ -2,7 +2,7 @@
 
 Name:           pygame
 Version:        1.7.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Python modules for writing games
 Group:          Development/Languages
 License:        LGPL
@@ -77,6 +77,11 @@ rm -rf %{buildroot}
 %{_includedir}/python*/%{name}/*.h
 
 %changelog
+* Fri Apr 21 2006 Christopher Stone <chris.stone@gmail.com> 1.7.1-3
+- Obsolete linva python-pygame package
+- Added Provides for python-pygame
+- Fix equal sign in devel requires
+
 * Thu Apr 20 2006 Christopher Stone <chris.stone@gmail.com> 1.7.1-2
 - Added a patch to clean up some warnings on 64 bit compiles
 
