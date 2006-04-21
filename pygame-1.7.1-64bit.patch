@@ -1,0 +1,173 @@
+--- src/mixer.c.orig	2005-08-10 23:14:27.000000000 -0700
++++ src/mixer.c	2006-04-20 14:16:28.000000000 -0700
+@@ -81,7 +81,7 @@
+ 	    channeldata[channel].queue = NULL;
+ 	    channelnum = Mix_PlayChannelTimed(channel, sound, 0, -1);
+ 	    if(channelnum != -1)
+-	    	Mix_GroupChannel(channelnum, (int)sound);
++	    	Mix_GroupChannel(channelnum, (intptr_t)sound);
+ 	}
+ 	else
+ 	{
+@@ -354,7 +354,7 @@
+ 	//make sure volume on this arbitrary channel is set to full
+ 	Mix_Volume(channelnum, 128);
+ 
+-	Mix_GroupChannel(channelnum, (int)chunk);
++	Mix_GroupChannel(channelnum, (intptr_t)chunk);
+ 	return PyChannel_New(channelnum);
+ }
+ 
+@@ -378,7 +378,7 @@
+ 
+ 	MIXER_INIT_CHECK();
+ 
+-	return PyInt_FromLong(Mix_GroupCount((int)chunk));
++	return PyInt_FromLong(Mix_GroupCount((intptr_t)chunk));
+ }
+ 
+ 
+@@ -440,7 +440,7 @@
+ 
+ 	MIXER_INIT_CHECK();
+ 
+-	Mix_FadeOutGroup((int)chunk, time);
++	Mix_FadeOutGroup((intptr_t)chunk, time);
+ 	RETURN_NONE
+ }
+ 
+@@ -460,7 +460,7 @@
+ 
+ 	MIXER_INIT_CHECK();
+ 
+-	Mix_HaltGroup((int)chunk);
++	Mix_HaltGroup((intptr_t)chunk);
+ 	RETURN_NONE
+ }
+ 
+@@ -661,7 +661,7 @@
+ 
+ 	channelnum = Mix_PlayChannelTimed(channelnum, chunk, loops, playtime);
+ 	if(channelnum != -1)
+-		Mix_GroupChannel(channelnum, (int)chunk);
++		Mix_GroupChannel(channelnum, (intptr_t)chunk);
+ 
+         Py_XDECREF(channeldata[channelnum].sound);
+ 	Py_XDECREF(channeldata[channelnum].queue);
+@@ -705,7 +705,7 @@
+ 	{
+ 	    channelnum = Mix_PlayChannelTimed(channelnum, chunk, 0, -1);
+ 	    if(channelnum != -1)
+-		    Mix_GroupChannel(channelnum, (int)chunk);
++		    Mix_GroupChannel(channelnum, (intptr_t)chunk);
+ 
+             channeldata[channelnum].sound = sound;
+             Py_INCREF(sound);
+--- src/overlay.c.org	2005-08-09 19:45:15.000000000 -0700
++++ src/overlay.c	2006-04-20 14:16:28.000000000 -0700
+@@ -85,7 +85,7 @@
+ {
+ 	// Parse data params for frame
+ 	int ls_y, ls_u, ls_v, y;
+-	unsigned char *dst_y, *dst_u, *dst_v, *src_y, *src_u, *src_v;
++	void *dst_y, *dst_u, *dst_v, *src_y, *src_u, *src_v;
+ 	if(!PyArg_ParseTuple(args, "(s#s#s#)", &src_y, &ls_y, &src_u, &ls_u, &src_v, &ls_v))
+ 		return NULL;
+ 
+@@ -94,9 +94,9 @@
+ 		SDL_LockYUVOverlay( self->cOverlay );
+ 
+ 		// No clipping at this time( only support for YUV420 )
+-		dst_y = (char*)self->cOverlay->pixels[ 0 ];
+-		dst_v = (char*)self->cOverlay->pixels[ 1 ];
+-		dst_u = (char*)self->cOverlay->pixels[ 2 ];
++		dst_y = (void*)self->cOverlay->pixels[ 0 ];
++		dst_v = (void*)self->cOverlay->pixels[ 1 ];
++		dst_u = (void*)self->cOverlay->pixels[ 2 ];
+ 		for (y=0; y< self->cOverlay->h; y++)
+ 		{
+ 			memcpy( dst_y, src_y, self->cOverlay->w );
+--- src/time.c.org	2004-07-22 17:33:08.000000000 -0700
++++ src/time.c	2006-04-20 14:24:43.000000000 -0700
+@@ -34,7 +34,7 @@
+ 	{
+ 		SDL_Event event;
+ 		memset(&event, 0, sizeof(event));
+-		event.type = (int)param;
++		event.type = (intptr_t)param;
+ 		SDL_PushEvent(&event);
+ 	}
+ 	return interval;
+@@ -193,7 +193,8 @@
+ static PyObject* time_set_timer(PyObject* self, PyObject* arg)
+ {
+ 	SDL_TimerID newtimer;
+-	int ticks = 0, event = SDL_NOEVENT;
++	int ticks = 0;
++	intptr_t event = SDL_NOEVENT;
+ 	if(!PyArg_ParseTuple(arg, "ii", &event, &ticks))
+ 		return NULL;
+ 
+--- src/surface.c.orig	2005-02-05 16:03:07.000000000 -0800
++++ src/surface.c	2006-04-20 15:01:07.000000000 -0700
+@@ -35,7 +35,7 @@
+                         SDL_Surface *dst, SDL_Rect *dstrect);
+ 
+ static PyObject* surface_new(PyTypeObject *type, PyObject *args, PyObject *kwds);
+-static int surface_init(PySurfaceObject *self, PyObject *args, PyObject *kwds);
++static intptr_t surface_init(PySurfaceObject *self, PyObject *args, PyObject *kwds);
+ 
+ 
+ /* surface object methods */
+@@ -1880,7 +1880,7 @@
+     return (PyObject *)self;
+ }
+ 
+-static int surface_init(PySurfaceObject *self, PyObject *args, PyObject *kwds)
++static intptr_t surface_init(PySurfaceObject *self, PyObject *args, PyObject *kwds)
+ {
+ 	Uint32 flags = 0;
+ 	int width, height;
+@@ -1904,19 +1904,19 @@
+ 	if(depth && masks) /*all info supplied, most errorchecking needed*/
+ 	{
+ 		if(PySurface_Check(depth))
+-			return (int)RAISE(PyExc_ValueError, "cannot pass surface for depth and color masks");
++			return (intptr_t)RAISE(PyExc_ValueError, "cannot pass surface for depth and color masks");
+ 		if(!IntFromObj(depth, &bpp))
+-			return (int)RAISE(PyExc_ValueError, "invalid bits per pixel depth argument");
++			return (intptr_t)RAISE(PyExc_ValueError, "invalid bits per pixel depth argument");
+ 		if(!PySequence_Check(masks) || PySequence_Length(masks)!=4)
+-			return (int)RAISE(PyExc_ValueError, "masks argument must be sequence of four numbers");
++			return (intptr_t)RAISE(PyExc_ValueError, "masks argument must be sequence of four numbers");
+ 		if(!UintFromObjIndex(masks, 0, &Rmask) || !UintFromObjIndex(masks, 1, &Gmask) ||
+ 					!UintFromObjIndex(masks, 2, &Bmask) || !UintFromObjIndex(masks, 3, &Amask))
+-			return (int)RAISE(PyExc_ValueError, "invalid mask values in masks sequence");
++			return (intptr_t)RAISE(PyExc_ValueError, "invalid mask values in masks sequence");
+ 	}
+ 	else if(depth && PyNumber_Check(depth))/*use default masks*/
+ 	{
+ 		if(!IntFromObj(depth, &bpp))
+-			return (int)RAISE(PyExc_ValueError, "invalid bits per pixel depth argument");
++			return (intptr_t)RAISE(PyExc_ValueError, "invalid bits per pixel depth argument");
+ 		if(flags & SDL_SRCALPHA)
+ 		{
+ 			switch(bpp)
+@@ -1926,7 +1926,7 @@
+ 			case 32:
+ 				Rmask = 0xFF<<16; Gmask = 0xFF<<8; Bmask = 0xFF; Amask = 0xFF<<24; break;
+ 			default:
+-				return (int)RAISE(PyExc_ValueError, "no standard masks exist for given bitdepth with alpha");
++				return (intptr_t)RAISE(PyExc_ValueError, "no standard masks exist for given bitdepth with alpha");
+ 			}
+ 		}
+ 		else
+@@ -1946,7 +1946,7 @@
+ 			case 32:
+ 				Rmask = 0xFF<<16; Gmask = 0xFF<<8; Bmask = 0xFF; break;
+ 			default:
+-				return (int)RAISE(PyExc_ValueError, "nonstandard bit depth given");
++				return (intptr_t)RAISE(PyExc_ValueError, "nonstandard bit depth given");
+ 			}
+ 		}
+ 	}

@@ -1,0 +1,10 @@
+--- config_unix.py.orig	2006-04-18 12:39:02.000000000 -0700
++++ config_unix.py	2006-04-18 12:38:25.000000000 -0700
+@@ -17,6 +17,7 @@
+ 
+ 
+ def confirm(message):
++    return 1
+     "ask a yes/no question, return result"
+     reply = raw_input('\n' + message + ' [Y/n]:')
+     if reply and string.lower(reply[0]) == 'n':
