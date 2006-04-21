@@ -2,7 +2,7 @@
 
 Name:           pygame
 Version:        1.7.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Python modules for writing games
 Group:          Development/Languages
 License:        LGPL
@@ -28,6 +28,8 @@ operating system.
 Summary:        Files needed for developing programs which use pygame
 Group:          Development/Libraries
 Requires:       %{name} = %{version}-%{release}
+Requires:       SDL_ttf-devel SDL_mixer-devel
+Requires:       python-devel
 
 %description devel
 This package contains headers required to build applications that use
@@ -39,8 +41,11 @@ pygame.
 %patch1 -p0 -b .64bit
 
 # rpmlint fixes
-chmod -x src/ffmovie.h
 rm -f examples/.#stars.py.1.7
+
+# These files must be provided by pygame-nonfree(-devel) packages on a
+# repository that can provide patent encumbered software.
+rm -f src/ffmovie.[ch]
 
 %build
 CFLAGS="%{optflags}" %{__python} setup.py build
@@ -77,6 +82,10 @@ rm -rf %{buildroot}
 %{_includedir}/python*/%{name}/*.h
 
 %changelog
+* Fri Apr 21 2006 Christopher Stone <chris.stone@gmail.com> 1.7.1-4
+- Add Requires to -devel package
+- Remove ffmovie.h from -devel package since it requires smpeg-devel
+
 * Fri Apr 21 2006 Christopher Stone <chris.stone@gmail.com> 1.7.1-3
 - Obsolete linva python-pygame package
 - Added Provides for python-pygame
