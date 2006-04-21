@@ -44,7 +44,7 @@ pygame.
 rm -f examples/.#stars.py.1.7
 
 # These files must be provided by pygame-nonfree(-devel) packages on a
-# repository that can provide patent encumbered software.
+# repository that does not have restrictions on providing non-free software
 rm -f src/ffmovie.[ch]
 
 %build
