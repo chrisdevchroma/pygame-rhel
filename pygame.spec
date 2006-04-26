@@ -2,7 +2,7 @@
 
 Name:           pygame
 Version:        1.7.1
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Python modules for writing games
 Group:          Development/Languages
 License:        LGPL
@@ -15,7 +15,9 @@ BuildRequires:  python-devel python-numeric
 BuildRequires:  SDL_ttf-devel SDL_image-devel SDL_mixer-devel
 Requires:       python-numeric
 Obsoletes:      python-pygame < 1.7.1
+Obsoletes:      python-pygame-docs < 1.7.1
 Provides:       python-pygame = %{version}-%{release}
+Provides:       python-pygame-docs = %{version}-%{release}
 
 %description
 Pygame is a set of Python modules designed for writing games. It is
@@ -30,6 +32,8 @@ Group:          Development/Libraries
 Requires:       %{name} = %{version}-%{release}
 Requires:       SDL_ttf-devel SDL_mixer-devel
 Requires:       python-devel
+Obsoletes:      python-pygame-devel < 1.7.1
+Provides:       python-pygame-devel = %{version}-%{release}
 
 %description devel
 This package contains headers required to build applications that use
@@ -82,6 +86,11 @@ rm -rf %{buildroot}
 %{_includedir}/python*/%{name}/*.h
 
 %changelog
+* Wed Apr 26 2006 Christopher Stone <chris.stone@gmail.com> 1.7.1-5
+- Add Obsolete/Provides tags for python-pygame-docs
+- Add Obsolete/Provides tags for python-pygame-devel to devel package
+- Hopefully this fixes Bugzilla bug #189991
+
 * Fri Apr 21 2006 Christopher Stone <chris.stone@gmail.com> 1.7.1-4
 - Add Requires to -devel package
 - Remove ffmovie.h from -devel package since it requires smpeg-devel
