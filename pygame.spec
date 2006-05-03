@@ -2,7 +2,7 @@
 
 Name:           pygame
 Version:        1.7.1
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Python modules for writing games
 Group:          Development/Languages
 License:        LGPL
@@ -15,9 +15,9 @@ BuildRequires:  python-devel python-numeric
 BuildRequires:  SDL_ttf-devel SDL_image-devel SDL_mixer-devel
 Requires:       python-numeric
 Obsoletes:      python-pygame < 1.7.1
-Obsoletes:      python-pygame-docs < 1.7.1
+Obsoletes:      python-pygame-doc < 1.7.1
 Provides:       python-pygame = %{version}-%{release}
-Provides:       python-pygame-docs = %{version}-%{release}
+Provides:       python-pygame-doc = %{version}-%{release}
 
 %description
 Pygame is a set of Python modules designed for writing games. It is
@@ -86,6 +86,9 @@ rm -rf %{buildroot}
 %{_includedir}/python*/%{name}/*.h
 
 %changelog
+* Wed May 03 2006 Christopher Stone <chris.stone@gmail.com> 1.7.1.7
+- Fix Obsolete/Provides of python-pygame-doc
+
 * Wed Apr 26 2006 Christopher Stone <chris.stone@gmail.com> 1.7.1-6
 - Bump release for new build on devel
 
