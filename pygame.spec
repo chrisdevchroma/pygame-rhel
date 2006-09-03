@@ -2,7 +2,7 @@
 
 Name:           pygame
 Version:        1.7.1
-Release:        7%{?dist}.1
+Release:        8%{?dist}
 Summary:        Python modules for writing games
 Group:          Development/Languages
 License:        LGPL
@@ -86,6 +86,9 @@ rm -rf %{buildroot}
 %{_includedir}/python*/%{name}/*.h
 
 %changelog
+* Sat Sep 02 2006 Christopher Stone <chris.stone@gmail.com> 1.7.1-8
+- FC6 Rebuild
+
 * Wed Jun 28 2006 Christopher Stone <chris.stone@gmail.com> 1.7.1-7.fc6.1
 - Rebuild bump
 
