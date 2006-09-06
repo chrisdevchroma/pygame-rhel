@@ -2,11 +2,11 @@
 
 Name:           pygame
 Version:        1.7.1
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        Python modules for writing games
 Group:          Development/Languages
 License:        LGPL
-URL:            http://www.pygame.org/
+URL:            http://www.pygame.org
 Patch0:         %{name}-%{version}-config.patch
 Patch1:         %{name}-%{version}-64bit.patch
 Source0:        http://pygame.org/ftp/%{name}-%{version}release.tar.gz
@@ -77,7 +77,7 @@ rm -rf %{buildroot}
 %{python_sitearch}/%{name}/*.so*
 %{python_sitearch}/%{name}/*.py
 %{python_sitearch}/%{name}/*.pyc
-%ghost %{python_sitearch}/%{name}/*.pyo
+%{python_sitearch}/%{name}/*.pyo
 
 %files devel
 %defattr(-,root,root,-)
@@ -86,6 +86,9 @@ rm -rf %{buildroot}
 %{_includedir}/python*/%{name}/*.h
 
 %changelog
+* Wed Sep 06 2006 Christopher Stone <chris.stone@gmail.com> 1.7.1-9
+- No longer %%ghost pyo files. Bug #205396
+
 * Sat Sep 02 2006 Christopher Stone <chris.stone@gmail.com> 1.7.1-8
 - FC6 Rebuild
 
