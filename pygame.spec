@@ -2,7 +2,7 @@
 
 Name:           pygame
 Version:        1.7.1
-Release:        9%{?dist}
+Release:        9%{?dist}.1
 Summary:        Python modules for writing games
 Group:          Development/Languages
 License:        LGPL
@@ -86,6 +86,9 @@ rm -rf %{buildroot}
 %{_includedir}/python*/%{name}/*.h
 
 %changelog
+* Fri Dec 08 2006 Christopher Stone <chris.stone@gmail.com> 1.7.1-9.fc7.1
+- python(abi) = 0:2.5
+
 * Wed Sep 06 2006 Christopher Stone <chris.stone@gmail.com> 1.7.1-9
 - No longer %%ghost pyo files. Bug #205396
 
