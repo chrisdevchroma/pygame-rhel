@@ -2,8 +2,9 @@
 
 Name:           pygame
 Version:        1.7.1
-Release:        9%{?dist}.1
+Release:        10%{?dist}
 Summary:        Python modules for writing games
+
 Group:          Development/Languages
 License:        LGPL
 URL:            http://www.pygame.org
@@ -11,12 +12,19 @@ Patch0:         %{name}-%{version}-config.patch
 Patch1:         %{name}-%{version}-64bit.patch
 Source0:        http://pygame.org/ftp/%{name}-%{version}release.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildRequires:  python-devel python-numeric
-BuildRequires:  SDL_ttf-devel SDL_image-devel SDL_mixer-devel
-Requires:       python-numeric
-Obsoletes:      python-pygame < 1.7.1
-Obsoletes:      python-pygame-doc < 1.7.1
+
+BuildRequires:  python-devel
+BuildRequires:  SDL_ttf-devel SDL_image-devel SDL_mixer-devel python-numeric
+Requires:       SDL_ttf-devel SDL_image-devel SDL_mixer-devel python-numeric
+
+# Obsolete/Provide old package names
+Obsoletes:      pygame-devel <= %{version}
+Provides:       pygame-devel = %{version}-%{release}
+Obsoletes:      python-pygame-devel <= %{version}
+Provides:       python-pygame-devel = %{version}-%{release}
+Obsoletes:      python-pygame <= %{version}
 Provides:       python-pygame = %{version}-%{release}
+Obsoletes:      python-pygame-doc <= %{version}
 Provides:       python-pygame-doc = %{version}-%{release}
 
 %description
@@ -26,18 +34,14 @@ fully featured games and multimedia programs in the python language.
 Pygame is highly portable and runs on nearly every platform and
 operating system.
 
-%package devel
-Summary:        Files needed for developing programs which use pygame
-Group:          Development/Libraries
+%package examples
+Summary:        Example code for using pygame
+Group:          Documentation
 Requires:       %{name} = %{version}-%{release}
-Requires:       SDL_ttf-devel SDL_mixer-devel
-Requires:       python-devel
-Obsoletes:      python-pygame-devel < 1.7.1
-Provides:       python-pygame-devel = %{version}-%{release}
 
-%description devel
-This package contains headers required to build applications that use
-pygame.
+%description examples
+%{summary}.
+
 
 %prep
 %setup -q -n %{name}-%{version}release
@@ -47,46 +51,50 @@ pygame.
 # rpmlint fixes
 rm -f examples/.#stars.py.1.7
 
+# remove macosx stuff
+rm -fr examples/macosx
+
 # These files must be provided by pygame-nonfree(-devel) packages on a
 # repository that does not have restrictions on providing non-free software
 rm -f src/ffmovie.[ch]
 
+
 %build
-CFLAGS="%{optflags}" %{__python} setup.py build
+CFLAGS="$RPM_OPT_FLAGS" %{__python} setup.py build
+
 
 %install
-rm -rf %{buildroot}
-%{__python} setup.py install -O1 --skip-build --root %{buildroot}
+rm -rf $RPM_BUILD_ROOT
+%{__python} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
+
 
 %check
 # base_test fails in mock, unable to find soundcard
-PYTHONPATH="%{buildroot}%{python_sitearch}" %{__python} test/base_test.py || :
-PYTHONPATH="%{buildroot}%{python_sitearch}" %{__python} test/image_test.py
-PYTHONPATH="%{buildroot}%{python_sitearch}" %{__python} test/rect_test.py
+PYTHONPATH="$RPM_BUILD_ROOT%{python_sitearch}" %{__python} test/base_test.py || :
+PYTHONPATH="$RPM_BUILD_ROOT%{python_sitearch}" %{__python} test/image_test.py
+PYTHONPATH="$RPM_BUILD_ROOT%{python_sitearch}" %{__python} test/rect_test.py
+
  
 %clean
-rm -rf %{buildroot}
+rm -rf $RPM_BUILD_ROOT
+
 
 %files
 %defattr(-,root,root,-)
-%doc docs/ readme.txt WHATSNEW
-%dir %{python_sitearch}/%{name}
-%{python_sitearch}/%{name}/freesansbold.ttf
-%{python_sitearch}/%{name}/pygame.ico
-%{python_sitearch}/%{name}/pygame_icon.*
-%{python_sitearch}/%{name}/*.so*
-%{python_sitearch}/%{name}/*.py
-%{python_sitearch}/%{name}/*.pyc
-%{python_sitearch}/%{name}/*.pyo
+%doc docs readme.txt WHATSNEW
+%{python_sitearch}/%{name}
+%{_includedir}/python*/%{name}
 
-%files devel
+%files examples
 %defattr(-,root,root,-)
-%doc examples/
-%dir %{_includedir}/python*/%{name}
-%{_includedir}/python*/%{name}/*.h
+%doc examples/*
+
 
 %changelog
-* Fri Dec 08 2006 Christopher Stone <chris.stone@gmail.com> 1.7.1-9.fc7.1
+* Sun Dec 10 2006 Christopher Stone <chris.stone@gmail.som> 1.7.1-10
+- Remove macosx examples
+- Move header files into main package
+- Move examples into examples subpackage
 - python(abi) = 0:2.5
 
 * Wed Sep 06 2006 Christopher Stone <chris.stone@gmail.com> 1.7.1-9
@@ -94,9 +102,6 @@ rm -rf %{buildroot}
 
 * Sat Sep 02 2006 Christopher Stone <chris.stone@gmail.com> 1.7.1-8
 - FC6 Rebuild
-
-* Wed Jun 28 2006 Christopher Stone <chris.stone@gmail.com> 1.7.1-7.fc6.1
-- Rebuild bump
 
 * Wed May 03 2006 Christopher Stone <chris.stone@gmail.com> 1.7.1-7
 - Fix Obsolete/Provides of python-pygame-doc
