@@ -2,7 +2,7 @@
 
 Name:           pygame
 Version:        1.7.1
-Release:        10%{?dist}
+Release:        11%{?dist}
 Summary:        Python modules for writing games
 
 Group:          Development/Languages
@@ -15,17 +15,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  python-devel
 BuildRequires:  SDL_ttf-devel SDL_image-devel SDL_mixer-devel python-numeric
-Requires:       SDL_ttf-devel SDL_image-devel SDL_mixer-devel python-numeric
-
-# Obsolete/Provide old package names
-Obsoletes:      pygame-devel <= %{version}
-Provides:       pygame-devel = %{version}-%{release}
-Obsoletes:      python-pygame-devel <= %{version}
-Provides:       python-pygame-devel = %{version}-%{release}
-Obsoletes:      python-pygame <= %{version}
-Provides:       python-pygame = %{version}-%{release}
-Obsoletes:      python-pygame-doc <= %{version}
-Provides:       python-pygame-doc = %{version}-%{release}
+Requires:       python-numeric
 
 %description
 Pygame is a set of Python modules designed for writing games. It is
@@ -91,6 +81,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Dec 11 2006 Christopher Stone <chris.stone@gmail.com> 1.7.1-11
+- Remove all Obsolete/Provides
+- Remove Requires on all devel packages
+
 * Sun Dec 10 2006 Christopher Stone <chris.stone@gmail.som> 1.7.1-10
 - Remove macosx examples
 - Move header files into main package
