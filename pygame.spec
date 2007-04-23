@@ -2,9 +2,8 @@
 
 Name:           pygame
 Version:        1.7.1
-Release:        11%{?dist}
+Release:        12%{?dist}
 Summary:        Python modules for writing games
-
 Group:          Development/Languages
 License:        LGPL
 URL:            http://www.pygame.org
@@ -12,10 +11,13 @@ Patch0:         %{name}-%{version}-config.patch
 Patch1:         %{name}-%{version}-64bit.patch
 Source0:        http://pygame.org/ftp/%{name}-%{version}release.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-
-BuildRequires:  python-devel
-BuildRequires:  SDL_ttf-devel SDL_image-devel SDL_mixer-devel python-numeric
+BuildRequires:  python-devel python-numeric
+BuildRequires:  SDL_ttf-devel SDL_image-devel SDL_mixer-devel
 Requires:       python-numeric
+Obsoletes:      python-pygame < 1.7.1
+Obsoletes:      python-pygame-doc < 1.7.1
+Provides:       python-pygame = %{version}-%{release}
+Provides:       python-pygame-doc = %{version}-%{release}
 
 %description
 Pygame is a set of Python modules designed for writing games. It is
@@ -24,14 +26,18 @@ fully featured games and multimedia programs in the python language.
 Pygame is highly portable and runs on nearly every platform and
 operating system.
 
-%package examples
-Summary:        Example code for using pygame
-Group:          Documentation
+%package devel
+Summary:        Files needed for developing programs which use pygame
+Group:          Development/Libraries
 Requires:       %{name} = %{version}-%{release}
+Requires:       SDL_ttf-devel SDL_mixer-devel
+Requires:       python-devel
+Obsoletes:      python-pygame-devel < 1.7.1
+Provides:       python-pygame-devel = %{version}-%{release}
 
-%description examples
-%{summary}.
-
+%description devel
+This package contains headers required to build applications that use
+pygame.
 
 %prep
 %setup -q -n %{name}-%{version}release
@@ -41,46 +47,48 @@ Requires:       %{name} = %{version}-%{release}
 # rpmlint fixes
 rm -f examples/.#stars.py.1.7
 
-# remove macosx stuff
-rm -fr examples/macosx
-
 # These files must be provided by pygame-nonfree(-devel) packages on a
 # repository that does not have restrictions on providing non-free software
 rm -f src/ffmovie.[ch]
 
-
 %build
-CFLAGS="$RPM_OPT_FLAGS" %{__python} setup.py build
-
+CFLAGS="%{optflags}" %{__python} setup.py build
 
 %install
-rm -rf $RPM_BUILD_ROOT
-%{__python} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
-
+rm -rf %{buildroot}
+%{__python} setup.py install -O1 --skip-build --root %{buildroot}
 
 %check
 # base_test fails in mock, unable to find soundcard
-PYTHONPATH="$RPM_BUILD_ROOT%{python_sitearch}" %{__python} test/base_test.py || :
-PYTHONPATH="$RPM_BUILD_ROOT%{python_sitearch}" %{__python} test/image_test.py
-PYTHONPATH="$RPM_BUILD_ROOT%{python_sitearch}" %{__python} test/rect_test.py
-
+PYTHONPATH="%{buildroot}%{python_sitearch}" %{__python} test/base_test.py || :
+PYTHONPATH="%{buildroot}%{python_sitearch}" %{__python} test/image_test.py
+PYTHONPATH="%{buildroot}%{python_sitearch}" %{__python} test/rect_test.py
  
 %clean
-rm -rf $RPM_BUILD_ROOT
-
+rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
-%doc docs readme.txt WHATSNEW
-%{python_sitearch}/%{name}
-%{_includedir}/python*/%{name}
+%doc docs/ readme.txt WHATSNEW
+%dir %{python_sitearch}/%{name}
+%{python_sitearch}/%{name}/freesansbold.ttf
+%{python_sitearch}/%{name}/pygame.ico
+%{python_sitearch}/%{name}/pygame_icon.*
+%{python_sitearch}/%{name}/*.so*
+%{python_sitearch}/%{name}/*.py
+%{python_sitearch}/%{name}/*.pyc
+%{python_sitearch}/%{name}/*.pyo
 
-%files examples
+%files devel
 %defattr(-,root,root,-)
-%doc examples/*
-
+%doc examples/
+%dir %{_includedir}/python*/%{name}
+%{_includedir}/python*/%{name}/*.h
 
 %changelog
+* Mon Apr 23 2007 Christopher Stone <chris.stone@gmail.com> 1.7.1-12
+- Revert back to version 1.7.1-9
+
 * Mon Dec 11 2006 Christopher Stone <chris.stone@gmail.com> 1.7.1-11
 - Remove all Obsolete/Provides
 - Remove Requires on all devel packages
@@ -96,6 +104,9 @@ rm -rf $RPM_BUILD_ROOT
 
 * Sat Sep 02 2006 Christopher Stone <chris.stone@gmail.com> 1.7.1-8
 - FC6 Rebuild
+
+* Wed Jun 28 2006 Christopher Stone <chris.stone@gmail.com> 1.7.1-7.fc6.1
+- Rebuild bump
 
 * Wed May 03 2006 Christopher Stone <chris.stone@gmail.com> 1.7.1-7
 - Fix Obsolete/Provides of python-pygame-doc
