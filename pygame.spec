@@ -2,15 +2,18 @@
 
 Name:           pygame
 Version:        1.7.1
-Release:        12%{?dist}
+Release:        13%{?dist}
 Summary:        Python modules for writing games
+
 Group:          Development/Languages
 License:        LGPL
 URL:            http://www.pygame.org
 Patch0:         %{name}-%{version}-config.patch
 Patch1:         %{name}-%{version}-64bit.patch
+Patch2:         %{name}-%{version}-64bit-2.patch
 Source0:        http://pygame.org/ftp/%{name}-%{version}release.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+
 BuildRequires:  python-devel python-numeric
 BuildRequires:  SDL_ttf-devel SDL_image-devel SDL_mixer-devel
 Requires:       python-numeric
@@ -39,33 +42,40 @@ Provides:       python-pygame-devel = %{version}-%{release}
 This package contains headers required to build applications that use
 pygame.
 
+
 %prep
-%setup -q -n %{name}-%{version}release
-%patch0 -p0 -b .config
-%patch1 -p0 -b .64bit
+%setup -qn %{name}-%{version}release
+%patch0 -p0 -b .config~
+%patch1 -p0 -b .64bit~
+%patch2 -p1 -b .64bit-2~
 
 # rpmlint fixes
-rm -f examples/.#stars.py.1.7
+rm -f "examples/.#stars.py.1.7"
 
 # These files must be provided by pygame-nonfree(-devel) packages on a
 # repository that does not have restrictions on providing non-free software
 rm -f src/ffmovie.[ch]
 
+
 %build
-CFLAGS="%{optflags}" %{__python} setup.py build
+CFLAGS="$RPM_OPT_FLAGS" %{__python} setup.py build
+
 
 %install
-rm -rf %{buildroot}
-%{__python} setup.py install -O1 --skip-build --root %{buildroot}
+rm -rf $RPM_BUILD_ROOT
+%{__python} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
+
 
 %check
 # base_test fails in mock, unable to find soundcard
-PYTHONPATH="%{buildroot}%{python_sitearch}" %{__python} test/base_test.py || :
-PYTHONPATH="%{buildroot}%{python_sitearch}" %{__python} test/image_test.py
-PYTHONPATH="%{buildroot}%{python_sitearch}" %{__python} test/rect_test.py
+PYTHONPATH="$RPM_BUILD_ROOT%{python_sitearch}" %{__python} test/base_test.py || :
+PYTHONPATH="$RPM_BUILD_ROOT%{python_sitearch}" %{__python} test/image_test.py
+PYTHONPATH="$RPM_BUILD_ROOT%{python_sitearch}" %{__python} test/rect_test.py
  
+
 %clean
-rm -rf %{buildroot}
+rm -rf $RPM_BUILD_ROOT
+
 
 %files
 %defattr(-,root,root,-)
@@ -85,7 +95,12 @@ rm -rf %{buildroot}
 %dir %{_includedir}/python*/%{name}
 %{_includedir}/python*/%{name}/*.h
 
+
 %changelog
+* Sat May 12 2007 Christopher Stone <chris.stone@gmail.com> 1.7.1-13
+- Apply 64-bit patch for python 2.5 (bz #239899)
+- Some minor spec file cleanups
+
 * Mon Apr 23 2007 Christopher Stone <chris.stone@gmail.com> 1.7.1-12
 - Revert back to version 1.7.1-9
 
