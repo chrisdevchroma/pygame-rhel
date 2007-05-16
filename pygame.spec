@@ -2,7 +2,7 @@
 
 Name:           pygame
 Version:        1.7.1
-Release:        13%{?dist}
+Release:        14%{?dist}
 Summary:        Python modules for writing games
 
 Group:          Development/Languages
@@ -10,7 +10,6 @@ License:        LGPL
 URL:            http://www.pygame.org
 Patch0:         %{name}-%{version}-config.patch
 Patch1:         %{name}-%{version}-64bit.patch
-Patch2:         %{name}-%{version}-64bit-2.patch
 Source0:        http://pygame.org/ftp/%{name}-%{version}release.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -46,8 +45,7 @@ pygame.
 %prep
 %setup -qn %{name}-%{version}release
 %patch0 -p0 -b .config~
-%patch1 -p0 -b .64bit~
-%patch2 -p1 -b .64bit-2~
+%patch1 -p1 -b .64bit~
 
 # rpmlint fixes
 rm -f "examples/.#stars.py.1.7"
@@ -97,6 +95,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue May 15 2007 Christopher Stone <chris.stone@gmail.com> 1.7.1-14
+- Add one more bit to 64-bit patch
+
 * Sat May 12 2007 Christopher Stone <chris.stone@gmail.com> 1.7.1-13
 - Apply 64-bit patch for python 2.5 (bz #239899)
 - Some minor spec file cleanups
