@@ -2,7 +2,7 @@
 
 Name:           pygame
 Version:        1.7.1
-Release:        14%{?dist}
+Release:        15%{?dist}
 Summary:        Python modules for writing games
 
 Group:          Development/Languages
@@ -95,6 +95,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Feb 20 2008 Fedora Release Engineering <rel-eng@fedoraproject.org> - 1.7.1-15
+- Autorebuild for GCC 4.3
+
 * Tue May 15 2007 Christopher Stone <chris.stone@gmail.com> 1.7.1-14
 - Add one more bit to 64-bit patch
 
