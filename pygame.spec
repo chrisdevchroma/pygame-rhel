@@ -2,11 +2,11 @@
 
 Name:           pygame
 Version:        1.7.1
-Release:        15%{?dist}
+Release:        16%{?dist}
 Summary:        Python modules for writing games
 
 Group:          Development/Languages
-License:        LGPL
+License:        LGPLv2+
 URL:            http://www.pygame.org
 Patch0:         %{name}-%{version}-config.patch
 Patch1:         %{name}-%{version}-64bit.patch
@@ -49,6 +49,9 @@ pygame.
 
 # rpmlint fixes
 rm -f "examples/.#stars.py.1.7"
+iconv -f iso8859-1 -t utf-8 WHATSNEW > WHATSNEW.conv && mv -f WHATSNEW.conv WHATSNEW
+iconv -f iso8859-1 -t utf-8 readme.txt > readme.txt.conv && mv -f readme.txt.conv readme.txt
+
 
 # These files must be provided by pygame-nonfree(-devel) packages on a
 # repository that does not have restrictions on providing non-free software
@@ -62,6 +65,9 @@ CFLAGS="$RPM_OPT_FLAGS" %{__python} setup.py build
 %install
 rm -rf $RPM_BUILD_ROOT
 %{__python} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
+
+# Fix permissions
+chmod 755 $RPM_BUILD_ROOT%{python_sitearch}/%{name}/*.so
 
 
 %check
@@ -86,6 +92,7 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitearch}/%{name}/*.py
 %{python_sitearch}/%{name}/*.pyc
 %{python_sitearch}/%{name}/*.pyo
+%{python_sitearch}/*egg-info
 
 %files devel
 %defattr(-,root,root,-)
@@ -95,6 +102,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Feb 21 2008 Christopher Stone <chris.stone@gmail.com> 1.7.1-16
+- Add egginfo file to %%files
+- Update %%license
+- Fix permissions on .so files
+
 * Wed Feb 20 2008 Fedora Release Engineering <rel-eng@fedoraproject.org> - 1.7.1-15
 - Autorebuild for GCC 4.3
 
