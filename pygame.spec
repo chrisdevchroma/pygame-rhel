@@ -92,7 +92,6 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitearch}/%{name}/*.py
 %{python_sitearch}/%{name}/*.pyc
 %{python_sitearch}/%{name}/*.pyo
-%{python_sitearch}/*egg-info
 
 %files devel
 %defattr(-,root,root,-)
@@ -106,7 +105,6 @@ rm -rf $RPM_BUILD_ROOT
 - Update config patch (bz #447603)
 
 * Thu Feb 21 2008 Christopher Stone <chris.stone@gmail.com> 1.7.1-16
-- Add egginfo file to %%files
 - Update %%license
 - Fix permissions on .so files
 
