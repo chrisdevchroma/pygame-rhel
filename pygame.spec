@@ -2,7 +2,7 @@
 
 Name:           pygame
 Version:        1.7.1
-Release:        16%{?dist}
+Release:        17%{?dist}
 Summary:        Python modules for writing games
 
 Group:          Development/Languages
@@ -102,6 +102,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu May 22 2008 Christopher Stone <chris.stone@gmail.com> 1.7.1-17
+- Update config patch (bz #447603)
+
 * Thu Feb 21 2008 Christopher Stone <chris.stone@gmail.com> 1.7.1-16
 - Add egginfo file to %%files
 - Update %%license
