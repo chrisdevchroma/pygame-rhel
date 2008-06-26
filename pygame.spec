@@ -2,7 +2,7 @@
 
 Name:           pygame
 Version:        1.7.1
-Release:        17%{?dist}
+Release:        17%{?dist}.1
 Summary:        Python modules for writing games
 
 Group:          Development/Languages
@@ -14,7 +14,7 @@ Source0:        http://pygame.org/ftp/%{name}-%{version}release.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  python-devel python-numeric
-BuildRequires:  SDL_ttf-devel SDL_image-devel SDL_mixer-devel
+BuildRequires:  SDL_ttf-devel SDL_image-devel
 Requires:       python-numeric
 Obsoletes:      python-pygame < 1.7.1
 Obsoletes:      python-pygame-doc < 1.7.1
@@ -32,7 +32,7 @@ operating system.
 Summary:        Files needed for developing programs which use pygame
 Group:          Development/Libraries
 Requires:       %{name} = %{version}-%{release}
-Requires:       SDL_ttf-devel SDL_mixer-devel
+Requires:       SDL_ttf-devel 
 Requires:       python-devel
 Obsoletes:      python-pygame-devel < 1.7.1
 Provides:       python-pygame-devel = %{version}-%{release}
@@ -102,6 +102,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Jun 26 2008 Dennis Gilmore <dennis@ausil.us> 1.7.1-17.1
+- Drop BR on SDL_mixer for OLPC
+
 * Thu May 22 2008 Christopher Stone <chris.stone@gmail.com> 1.7.1-17
 - Update config patch (bz #447603)
 
