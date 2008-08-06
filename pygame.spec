@@ -1,25 +1,21 @@
 %{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 
 Name:           pygame
-Version:        1.7.1
-Release:        17%{?dist}.1
+Version:        1.8.0
+Release:        1%{?dist}.2
 Summary:        Python modules for writing games
 
 Group:          Development/Languages
 License:        LGPLv2+
 URL:            http://www.pygame.org
-Patch0:         %{name}-%{version}-config.patch
-Patch1:         %{name}-%{version}-64bit.patch
+Patch0:         %{name}-1.7.1-config.patch
 Source0:        http://pygame.org/ftp/%{name}-%{version}release.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:  python-devel python-numeric
-BuildRequires:  SDL_ttf-devel SDL_image-devel
-Requires:       python-numeric
-Obsoletes:      python-pygame < 1.7.1
-Obsoletes:      python-pygame-doc < 1.7.1
-Provides:       python-pygame = %{version}-%{release}
-Provides:       python-pygame-doc = %{version}-%{release}
+BuildRequires:  python-devel numpy
+BuildRequires:  SDL_ttf-devel SDL_image-devel SDL_mixer-devel
+BuildRequires:  libpng-devel libjpeg-devel libX11-devel
+Requires:       numpy
 
 %description
 Pygame is a set of Python modules designed for writing games. It is
@@ -32,10 +28,8 @@ operating system.
 Summary:        Files needed for developing programs which use pygame
 Group:          Development/Libraries
 Requires:       %{name} = %{version}-%{release}
-Requires:       SDL_ttf-devel 
+Requires:       SDL_ttf-devel SDL_mixer-devel
 Requires:       python-devel
-Obsoletes:      python-pygame-devel < 1.7.1
-Provides:       python-pygame-devel = %{version}-%{release}
 
 %description devel
 This package contains headers required to build applications that use
@@ -45,10 +39,9 @@ pygame.
 %prep
 %setup -qn %{name}-%{version}release
 %patch0 -p0 -b .config~
-%patch1 -p1 -b .64bit~
 
 # rpmlint fixes
-rm -f "examples/.#stars.py.1.7"
+chmod -x examples/*py
 iconv -f iso8859-1 -t utf-8 WHATSNEW > WHATSNEW.conv && mv -f WHATSNEW.conv WHATSNEW
 iconv -f iso8859-1 -t utf-8 readme.txt > readme.txt.conv && mv -f readme.txt.conv readme.txt
 
@@ -85,14 +78,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %doc docs/ readme.txt WHATSNEW
 %dir %{python_sitearch}/%{name}
-%{python_sitearch}/%{name}/freesansbold.ttf
-%{python_sitearch}/%{name}/pygame.ico
-%{python_sitearch}/%{name}/pygame_icon.*
-%{python_sitearch}/%{name}/*.so*
-%{python_sitearch}/%{name}/*.py
-%{python_sitearch}/%{name}/*.pyc
-%{python_sitearch}/%{name}/*.pyo
-%{python_sitearch}/*egg-info
+%{python_sitearch}/%{name}*
 
 %files devel
 %defattr(-,root,root,-)
@@ -102,6 +88,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Aug  6 2008 Daniel Drake <dsd@laptop.org> 1.8.0-1.2
+- Sync with devel for version 1.8.0
+- Require numpy rather than numeric
+- Readd SDL_mixer requires, dlo#7603
+
 * Thu Jun 26 2008 Dennis Gilmore <dennis@ausil.us> 1.7.1-17.1
 - Drop BR on SDL_mixer for OLPC
 
