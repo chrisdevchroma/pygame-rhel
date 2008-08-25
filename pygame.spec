@@ -14,6 +14,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  python-devel numpy
 BuildRequires:  SDL_ttf-devel SDL_image-devel SDL_mixer-devel
+BuildRequires:  SDL-devel
 BuildRequires:  libpng-devel libjpeg-devel libX11-devel
 Requires:       numpy
 
@@ -90,6 +91,7 @@ rm -rf $RPM_BUILD_ROOT
 %changelog
 * Mon Aug 25 2008 Robin Norwood <robin.norwood@gmail.com> 1.8.0-3
 - Rebase config patch for 1.8.0
+- Need to specify BR: SDL-devel
 
 * Mon Aug 25 2008 Robin Norwood <robin.norwood@gmail.com> 1.8.0-2
 - Change from requiring python-numeric to numpy
