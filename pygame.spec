@@ -2,7 +2,7 @@
 
 Name:           pygame
 Version:        1.8.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Python modules for writing games
 
 Group:          Development/Languages
@@ -12,10 +12,10 @@ Patch0:         %{name}-1.7.1-config.patch
 Source0:        http://pygame.org/ftp/%{name}-%{version}release.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:  python-devel python-numeric
+BuildRequires:  python-devel numpy
 BuildRequires:  SDL_ttf-devel SDL_image-devel SDL_mixer-devel
 BuildRequires:  libpng-devel libjpeg-devel libX11-devel
-Requires:       python-numeric
+Requires:       numpy
 
 %description
 Pygame is a set of Python modules designed for writing games. It is
@@ -88,6 +88,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Aug 25 2008 Robin Norwood <robin.norwood@gmail.com> 1.8.0-2
+- Change from requiring python-numeric to numpy
+- rhbz#457074
+
 * Thu May 22 2008 Christopher Stone <chris.stone@gmail.com> 1.8.0-1
 - Upstream sync
 - Remove Obsolets/Provides (been around since FC-4)
