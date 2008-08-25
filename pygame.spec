@@ -2,13 +2,13 @@
 
 Name:           pygame
 Version:        1.8.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Python modules for writing games
 
 Group:          Development/Languages
 License:        LGPLv2+
 URL:            http://www.pygame.org
-Patch0:         %{name}-1.7.1-config.patch
+Patch0:         %{name}-1.8.0-config.patch
 Source0:        http://pygame.org/ftp/%{name}-%{version}release.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -38,7 +38,7 @@ pygame.
 
 %prep
 %setup -qn %{name}-%{version}release
-%patch0 -p0 -b .config~
+%patch0 -p1
 
 # rpmlint fixes
 chmod -x examples/*py
@@ -88,6 +88,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Aug 25 2008 Robin Norwood <robin.norwood@gmail.com> 1.8.0-3
+- Rebase config patch for 1.8.0
+
 * Mon Aug 25 2008 Robin Norwood <robin.norwood@gmail.com> 1.8.0-2
 - Change from requiring python-numeric to numpy
 - rhbz#457074
