@@ -1,5 +1,5 @@
---- pygame-1.8.0release/config_unix.py	Sat Jan 19 21:26:49 2008
-+++ pygame-1.8.0release/config_unix.py	Mon Aug 25 16:58:24 2008
+--- pygame-1.8.1release/config_unix.py	Mon Jul  7 01:58:40 2008
++++ pygame-1.8.1release/config_unix.py	Tue Aug 26 09:24:43 2008
 @@ -15,6 +15,7 @@
  
  def confirm(message):

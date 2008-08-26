@@ -1,14 +1,14 @@
 %{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 
 Name:           pygame
-Version:        1.8.0
-Release:        3%{?dist}
+Version:        1.8.1
+Release:        1%{?dist}
 Summary:        Python modules for writing games
 
 Group:          Development/Languages
 License:        LGPLv2+
 URL:            http://www.pygame.org
-Patch0:         %{name}-1.8.0-config.patch
+Patch0:         %{name}-1.8.1-config.patch
 Source0:        http://pygame.org/ftp/%{name}-%{version}release.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -39,12 +39,17 @@ pygame.
 
 %prep
 %setup -qn %{name}-%{version}release
+
 %patch0 -p1
 
 # rpmlint fixes
-chmod -x examples/*py
+find examples/ -type f -print0 | xargs -0 chmod -x 
+find docs/ -type f -print0 | xargs -0 chmod -x
+find src/ -type f -name '*.h' -print0 | xargs -0 chmod -x
+chmod -x README.txt WHATSNEW
+
 iconv -f iso8859-1 -t utf-8 WHATSNEW > WHATSNEW.conv && mv -f WHATSNEW.conv WHATSNEW
-iconv -f iso8859-1 -t utf-8 readme.txt > readme.txt.conv && mv -f readme.txt.conv readme.txt
+iconv -f iso8859-1 -t utf-8 README.txt > README.txt.conv && mv -f README.txt.conv README.txt
 
 
 # These files must be provided by pygame-nonfree(-devel) packages on a
@@ -77,7 +82,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%doc docs/ readme.txt WHATSNEW
+%doc docs/ README.txt WHATSNEW
 %dir %{python_sitearch}/%{name}
 %{python_sitearch}/%{name}*
 
@@ -89,6 +94,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Aug 26 2008 Robin Norwood <robin.norwood@gmail.com> 1.8.1-1
+- Update to new upstream version.
+- rpmlint fixes
+
 * Mon Aug 25 2008 Robin Norwood <robin.norwood@gmail.com> 1.8.0-3
 - Rebase config patch for 1.8.0
 - Need to specify BR: SDL-devel
