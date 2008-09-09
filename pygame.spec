@@ -2,7 +2,7 @@
 
 Name:           pygame
 Version:        1.8.0
-Release:        1%{?dist}.2
+Release:        1%{?dist}.3
 Summary:        Python modules for writing games
 
 Group:          Development/Languages
@@ -16,6 +16,7 @@ BuildRequires:  python-devel numpy
 BuildRequires:  SDL_ttf-devel SDL_image-devel SDL_mixer-devel
 BuildRequires:  libpng-devel libjpeg-devel libX11-devel
 Requires:       numpy
+Requires:       SDL_Pango
 
 %description
 Pygame is a set of Python modules designed for writing games. It is
@@ -30,6 +31,7 @@ Group:          Development/Libraries
 Requires:       %{name} = %{version}-%{release}
 Requires:       SDL_ttf-devel SDL_mixer-devel
 Requires:       python-devel
+Requires:       SDL_Pango-devel
 
 %description devel
 This package contains headers required to build applications that use
@@ -88,6 +90,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Sep  9 2008 C. Scott Ananian <cscott@laptop.org> 1.8.0-1.3
+- Requires SDL_Pango for i18n support, dlo#7997
+
 * Wed Aug  6 2008 Daniel Drake <dsd@laptop.org> 1.8.0-1.2
 - Sync with devel for version 1.8.0
 - Require numpy rather than numeric
