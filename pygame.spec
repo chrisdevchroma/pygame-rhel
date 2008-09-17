@@ -2,7 +2,7 @@
 
 Name:           pygame
 Version:        1.8.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Python modules for writing games
 
 Group:          Development/Languages
@@ -17,6 +17,11 @@ BuildRequires:  SDL_ttf-devel SDL_image-devel SDL_mixer-devel
 BuildRequires:  libpng-devel libjpeg-devel libX11-devel
 Requires:       numpy
 
+Obsoletes:      python-pygame < 1.7.1
+Obsoletes:      python-pygame-doc < 1.7.1
+Provides:       python-pygame = %{version}-%{release}
+Provides:       python-pygame-doc = %{version}-%{release}
+
 %description
 Pygame is a set of Python modules designed for writing games. It is
 written on top of the excellent SDL library. This allows you to create
@@ -30,6 +35,8 @@ Group:          Development/Libraries
 Requires:       %{name} = %{version}-%{release}
 Requires:       SDL_ttf-devel SDL_mixer-devel
 Requires:       python-devel
+Obsoletes:      python-pygame-devel < 1.7.1
+Provides:       python-pygame-devel = %{version}-%{release}
 
 %description devel
 This package contains headers required to build applications that use
@@ -92,6 +99,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Sep 17 2008 Robin Norwood <robin.norwood@gmail.com> 1.8.1-2
+- Bring back Provides and Obsoletes for python-pygame
+
 * Tue Aug 26 2008 Robin Norwood <robin.norwood@gmail.com> 1.8.1-1
 - Update to new upstream version.
 - rpmlint fixes
