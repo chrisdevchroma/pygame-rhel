@@ -2,7 +2,7 @@
 
 Name:           pygame
 Version:        1.8.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Python modules for writing games
 
 Group:          Development/Languages
@@ -94,6 +94,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Nov 29 2008 Ignacio Vazquez-Abrams <ivazqueznet+rpm@gmail.com> - 1.8.1-3
+- Rebuild for Python 2.6
+
 * Wed Sep 17 2008 Robin Norwood <robin.norwood@gmail.com> 1.8.1-2
 - Bump release to trump F9 version.
 
