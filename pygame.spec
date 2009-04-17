@@ -2,7 +2,7 @@
 
 Name:           pygame
 Version:        1.8.1
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Python modules for writing games
 
 Group:          Development/Languages
@@ -12,11 +12,11 @@ Patch0:         %{name}-1.8.1-config.patch
 Source0:        http://pygame.org/ftp/%{name}-%{version}release.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:  python-devel numpy-f2py
+BuildRequires:  python-devel numpy
 BuildRequires:  SDL_ttf-devel SDL_image-devel SDL_mixer-devel
 BuildRequires:  SDL-devel
 BuildRequires:  libpng-devel libjpeg-devel libX11-devel
-Requires:       numpy-f2py
+Requires:       numpy
 
 %description
 Pygame is a set of Python modules designed for writing games. It is
@@ -94,8 +94,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Apr 17 2009 Jon Ciesla <limb@jcomserv.net> - 1.8.1-6
+- Dropped f2py deps, unneeded now that numpy is fixed: BZ 496277.
+
 * Fri Apr 17 2009 Jon Ciesla <limb@jcomserv.net> - 1.8.1-5
-- Add dep for numpy-f2py to fix brokn games, BZ 496218.
+- Add dep for numpy-f2py to fix broken games, BZ 496218.
 
 * Thu Feb 26 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.8.1-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
