@@ -12,7 +12,7 @@ Patch0:         %{name}-1.8.1-config.patch
 Source0:        http://pygame.org/ftp/%{name}-%{version}release.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:  python-devel numpy
+BuildRequires:  python-devel numpy-f2py
 BuildRequires:  SDL_ttf-devel SDL_image-devel SDL_mixer-devel
 BuildRequires:  SDL-devel
 BuildRequires:  libpng-devel libjpeg-devel libX11-devel
