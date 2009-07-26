@@ -2,7 +2,7 @@
 
 Name:           pygame
 Version:        1.8.1
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Python modules for writing games
 
 Group:          Development/Languages
@@ -94,6 +94,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sun Jul 26 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.8.1-7
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
+
 * Fri Apr 17 2009 Jon Ciesla <limb@jcomserv.net> - 1.8.1-6
 - Dropped f2py deps, unneeded now that numpy is fixed: BZ 496277.
 
