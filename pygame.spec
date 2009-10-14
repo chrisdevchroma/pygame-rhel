@@ -1,14 +1,15 @@
 %{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 
 Name:           pygame
-Version:        1.8.1
-Release:        7%{?dist}
+Version:        1.9.1
+Release:        1%{?dist}
 Summary:        Python modules for writing games
 
 Group:          Development/Languages
 License:        LGPLv2+
 URL:            http://www.pygame.org
-Patch0:         %{name}-1.8.1-config.patch
+#Patch0:         %{name}-1.8.1-config.patch
+Patch0:         %{name}-1.9.1-config.patch
 Source0:        http://pygame.org/ftp/%{name}-%{version}release.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -94,6 +95,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Oct 08 2009 Jon Ciesla <limb@jcomserv.net> - 1.9.1-1
+- New upstream release, BZ 526365.
+- Updated config_unix patch for 1.9.1.
+
 * Sun Jul 26 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.8.1-7
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
 
