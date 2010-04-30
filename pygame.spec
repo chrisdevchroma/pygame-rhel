@@ -1,23 +1,23 @@
 %{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 
 Name:           pygame
-Version:        1.7.1
-Release:        9%{?dist}
+Version:        1.9.1
+Release:        1%{?dist}
 Summary:        Python modules for writing games
+
 Group:          Development/Languages
-License:        LGPL
+License:        LGPLv2+
 URL:            http://www.pygame.org
-Patch0:         %{name}-%{version}-config.patch
-Patch1:         %{name}-%{version}-64bit.patch
+#Patch0:         %{name}-1.8.1-config.patch
+Patch0:         %{name}-1.9.1-config.patch
 Source0:        http://pygame.org/ftp/%{name}-%{version}release.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildRequires:  python-devel python-numeric
+
+BuildRequires:  python-devel numpy
 BuildRequires:  SDL_ttf-devel SDL_image-devel SDL_mixer-devel
-Requires:       python-numeric
-Obsoletes:      python-pygame < 1.7.1
-Obsoletes:      python-pygame-doc < 1.7.1
-Provides:       python-pygame = %{version}-%{release}
-Provides:       python-pygame-doc = %{version}-%{release}
+BuildRequires:  SDL-devel
+BuildRequires:  libpng-devel libjpeg-devel libX11-devel
+Requires:       numpy
 
 %description
 Pygame is a set of Python modules designed for writing games. It is
@@ -32,52 +32,60 @@ Group:          Development/Libraries
 Requires:       %{name} = %{version}-%{release}
 Requires:       SDL_ttf-devel SDL_mixer-devel
 Requires:       python-devel
-Obsoletes:      python-pygame-devel < 1.7.1
-Provides:       python-pygame-devel = %{version}-%{release}
 
 %description devel
 This package contains headers required to build applications that use
 pygame.
 
+
 %prep
-%setup -q -n %{name}-%{version}release
-%patch0 -p0 -b .config
-%patch1 -p0 -b .64bit
+%setup -qn %{name}-%{version}release
+
+%patch0 -p1
 
 # rpmlint fixes
-rm -f examples/.#stars.py.1.7
+find examples/ -type f -print0 | xargs -0 chmod -x 
+find docs/ -type f -print0 | xargs -0 chmod -x
+find src/ -type f -name '*.h' -print0 | xargs -0 chmod -x
+chmod -x README.txt WHATSNEW
+
+iconv -f iso8859-1 -t utf-8 WHATSNEW > WHATSNEW.conv && mv -f WHATSNEW.conv WHATSNEW
+iconv -f iso8859-1 -t utf-8 README.txt > README.txt.conv && mv -f README.txt.conv README.txt
+
 
 # These files must be provided by pygame-nonfree(-devel) packages on a
 # repository that does not have restrictions on providing non-free software
 rm -f src/ffmovie.[ch]
 
+
 %build
-CFLAGS="%{optflags}" %{__python} setup.py build
+CFLAGS="$RPM_OPT_FLAGS" %{__python} setup.py build
+
 
 %install
-rm -rf %{buildroot}
-%{__python} setup.py install -O1 --skip-build --root %{buildroot}
+rm -rf $RPM_BUILD_ROOT
+%{__python} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
+
+# Fix permissions
+chmod 755 $RPM_BUILD_ROOT%{python_sitearch}/%{name}/*.so
+
 
 %check
 # base_test fails in mock, unable to find soundcard
-PYTHONPATH="%{buildroot}%{python_sitearch}" %{__python} test/base_test.py || :
-PYTHONPATH="%{buildroot}%{python_sitearch}" %{__python} test/image_test.py
-PYTHONPATH="%{buildroot}%{python_sitearch}" %{__python} test/rect_test.py
+PYTHONPATH="$RPM_BUILD_ROOT%{python_sitearch}" %{__python} test/base_test.py || :
+PYTHONPATH="$RPM_BUILD_ROOT%{python_sitearch}" %{__python} test/image_test.py
+PYTHONPATH="$RPM_BUILD_ROOT%{python_sitearch}" %{__python} test/rect_test.py
  
+
 %clean
-rm -rf %{buildroot}
+rm -rf $RPM_BUILD_ROOT
+
 
 %files
 %defattr(-,root,root,-)
-%doc docs/ readme.txt WHATSNEW
+%doc docs/ README.txt WHATSNEW
 %dir %{python_sitearch}/%{name}
-%{python_sitearch}/%{name}/freesansbold.ttf
-%{python_sitearch}/%{name}/pygame.ico
-%{python_sitearch}/%{name}/pygame_icon.*
-%{python_sitearch}/%{name}/*.so*
-%{python_sitearch}/%{name}/*.py
-%{python_sitearch}/%{name}/*.pyc
-%{python_sitearch}/%{name}/*.pyo
+%{python_sitearch}/%{name}*
 
 %files devel
 %defattr(-,root,root,-)
@@ -85,7 +93,79 @@ rm -rf %{buildroot}
 %dir %{_includedir}/python*/%{name}
 %{_includedir}/python*/%{name}/*.h
 
+
 %changelog
+* Thu Oct 08 2009 Jon Ciesla <limb@jcomserv.net> - 1.9.1-1
+- New upstream release, BZ 526365.
+- Updated config_unix patch for 1.9.1.
+
+* Sun Jul 26 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.8.1-7
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
+
+* Fri Apr 17 2009 Jon Ciesla <limb@jcomserv.net> - 1.8.1-6
+- Dropped f2py deps, unneeded now that numpy is fixed: BZ 496277.
+
+* Fri Apr 17 2009 Jon Ciesla <limb@jcomserv.net> - 1.8.1-5
+- Add dep for numpy-f2py to fix broken games, BZ 496218.
+
+* Thu Feb 26 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.8.1-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
+
+* Sat Nov 29 2008 Ignacio Vazquez-Abrams <ivazqueznet+rpm@gmail.com> - 1.8.1-3
+- Rebuild for Python 2.6
+
+* Wed Sep 17 2008 Robin Norwood <robin.norwood@gmail.com> 1.8.1-2
+- Bump release to trump F9 version.
+
+* Tue Aug 26 2008 Robin Norwood <robin.norwood@gmail.com> 1.8.1-1
+- Update to new upstream version.
+- rpmlint fixes
+
+* Mon Aug 25 2008 Robin Norwood <robin.norwood@gmail.com> 1.8.0-3
+- Rebase config patch for 1.8.0
+- Need to specify BR: SDL-devel
+
+* Mon Aug 25 2008 Robin Norwood <robin.norwood@gmail.com> 1.8.0-2
+- Change from requiring python-numeric to numpy
+- rhbz#457074
+
+* Thu May 22 2008 Christopher Stone <chris.stone@gmail.com> 1.8.0-1
+- Upstream sync
+- Remove Obsolets/Provides (been around since FC-4)
+- Remove no longer needed 64bit patch
+- Remove %%{version} macro from Patch0 definition
+- Add png, jpeg, and X11 libraries to BuildRequires
+- Simplify %%files section
+- Fix up some rpmlint warnings
+
+* Thu Feb 21 2008 Christopher Stone <chris.stone@gmail.com> 1.7.1-16
+- Add egginfo file to %%files
+- Update %%license
+- Fix permissions on .so files
+
+* Wed Feb 20 2008 Fedora Release Engineering <rel-eng@fedoraproject.org> - 1.7.1-15
+- Autorebuild for GCC 4.3
+
+* Tue May 15 2007 Christopher Stone <chris.stone@gmail.com> 1.7.1-14
+- Add one more bit to 64-bit patch
+
+* Sat May 12 2007 Christopher Stone <chris.stone@gmail.com> 1.7.1-13
+- Apply 64-bit patch for python 2.5 (bz #239899)
+- Some minor spec file cleanups
+
+* Mon Apr 23 2007 Christopher Stone <chris.stone@gmail.com> 1.7.1-12
+- Revert back to version 1.7.1-9
+
+* Mon Dec 11 2006 Christopher Stone <chris.stone@gmail.com> 1.7.1-11
+- Remove all Obsolete/Provides
+- Remove Requires on all devel packages
+
+* Sun Dec 10 2006 Christopher Stone <chris.stone@gmail.som> 1.7.1-10
+- Remove macosx examples
+- Move header files into main package
+- Move examples into examples subpackage
+- python(abi) = 0:2.5
+
 * Wed Sep 06 2006 Christopher Stone <chris.stone@gmail.com> 1.7.1-9
 - No longer %%ghost pyo files. Bug #205396
 
