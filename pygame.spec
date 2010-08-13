@@ -2,7 +2,7 @@
 
 Name:           pygame
 Version:        1.9.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Python modules for writing games
 
 Group:          Development/Languages
@@ -10,6 +10,8 @@ License:        LGPLv2+
 URL:            http://www.pygame.org
 #Patch0:         %{name}-1.8.1-config.patch
 Patch0:         %{name}-1.9.1-config.patch
+# porttime is part of libportmidi.so, there's no libporttime in Fedora
+Patch1:         pygame-1.9.1-porttime.patch
 Source0:        http://pygame.org/ftp/%{name}-%{version}release.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -17,6 +19,7 @@ BuildRequires:  python-devel numpy
 BuildRequires:  SDL_ttf-devel SDL_image-devel SDL_mixer-devel
 BuildRequires:  SDL-devel
 BuildRequires:  libpng-devel libjpeg-devel libX11-devel
+BuildRequires:  portmidi-devel
 Requires:       numpy
 
 %description
@@ -42,6 +45,7 @@ pygame.
 %setup -qn %{name}-%{version}release
 
 %patch0 -p1
+%patch1 -p1
 
 # rpmlint fixes
 find examples/ -type f -print0 | xargs -0 chmod -x 
@@ -95,6 +99,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Aug 13 2010 Jan Kaluza <jkaluza@redhat.com> - 1.9.1-3
+- fix #585526 - add MIDI support
+
 * Wed Jul 21 2010 David Malcolm <dmalcolm@redhat.com> - 1.9.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Features/Python_2.7/MassRebuild
 
