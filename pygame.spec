@@ -2,7 +2,7 @@
 
 Name:           pygame
 Version:        1.9.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Python modules for writing games
 
 Group:          Development/Languages
@@ -12,6 +12,7 @@ URL:            http://www.pygame.org
 Patch0:         %{name}-1.9.1-config.patch
 # porttime is part of libportmidi.so, there's no libporttime in Fedora
 Patch1:         pygame-1.9.1-porttime.patch
+Patch2:         pygame-1.9.1-no-test-install.patch
 Source0:        http://pygame.org/ftp/%{name}-%{version}release.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -46,6 +47,7 @@ pygame.
 
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 # rpmlint fixes
 find examples/ -type f -print0 | xargs -0 chmod -x 
@@ -99,6 +101,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Aug 16 2010 Jan Kaluza <jkaluza@redhat.com> - 1.9.1-4
+- fix #607753 - Do not install tests
+
 * Thu Aug 12 2010 Jan Kaluza <jkaluza@redhat.com> - 1.9.1-3
 - fix #585526 - add MIDI support
 
