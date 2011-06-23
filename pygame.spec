@@ -2,7 +2,7 @@
 
 Name:           pygame
 Version:        1.9.1
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Python modules for writing games
 
 Group:          Development/Languages
@@ -13,6 +13,9 @@ Patch0:         %{name}-1.9.1-config.patch
 # porttime is part of libportmidi.so, there's no libporttime in Fedora
 Patch1:         pygame-1.9.1-porttime.patch
 Patch2:         pygame-1.9.1-no-test-install.patch
+# patch backported from upstream repository, V4L has been remove in linux-2.6.38
+# http://svn.seul.org/viewcvs/viewvc.cgi?view=rev&root=PyGame&revision=3077
+Patch3:         pygame-remove-v4l.patch
 Source0:        http://pygame.org/ftp/%{name}-%{version}release.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -48,6 +51,7 @@ pygame.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 # rpmlint fixes
 find examples/ -type f -print0 | xargs -0 chmod -x 
@@ -101,6 +105,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Jun 23 2011 Jan Kaluza <jkaluza@redhat.com> - 1.9.1-6
+- Removed V4L support because V4L has been deprecated from the Linux
+  kernel as of 2.6.38
+
 * Tue Feb 08 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.9.1-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
 
