@@ -2,7 +2,7 @@
 
 Name:           pygame
 Version:        1.9.1
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Python modules for writing games
 
 Group:          Development/Languages
@@ -105,6 +105,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Dec 06 2011 Adam Jackson <ajax@redhat.com> - 1.9.1-7
+- Rebuild for new libpng
+
 * Thu Jun 23 2011 Jan Kaluza <jkaluza@redhat.com> - 1.9.1-6
 - Removed V4L support because V4L has been deprecated from the Linux
   kernel as of 2.6.38
