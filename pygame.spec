@@ -2,7 +2,7 @@
 
 Name:           pygame
 Version:        1.9.1
-Release:        9%{?dist}
+Release:        10%{?dist}
 Summary:        Python modules for writing games
 
 Group:          Development/Languages
@@ -24,7 +24,7 @@ BuildRequires:  SDL_ttf-devel SDL_image-devel SDL_mixer-devel
 BuildRequires:  SDL-devel
 BuildRequires:  libpng-devel libjpeg-devel libX11-devel
 BuildRequires:  portmidi-devel
-Requires:       numpy
+Requires:       numpy gnu-free-sans-fonts
 
 %description
 Pygame is a set of Python modules designed for writing games. It is
@@ -76,6 +76,10 @@ CFLAGS="$RPM_OPT_FLAGS" %{__python} setup.py build
 rm -rf $RPM_BUILD_ROOT
 %{__python} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
 
+#use system font.
+rm -f $RPM_BUILD_ROOT%{python_sitearch}/%{name}/freesansbold.ttf
+ln -s /usr/share/fonts/gnu-free/FreeSansBold.ttf $RPM_BUILD_ROOT%{python_sitearch}/%{name}/freesansbold.ttf
+
 # Fix permissions
 chmod 755 $RPM_BUILD_ROOT%{python_sitearch}/%{name}/*.so
 
@@ -105,6 +109,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Jul 30 2012 Jon Ciesla <limburgher@gmail.com> - 1.9.1-10
+- Use system font, BZ 477444.
+
 * Sat Jul 21 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.9.1-9
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
 
