@@ -2,7 +2,7 @@
 
 Name:           pygame
 Version:        1.9.1
-Release:        10%{?dist}
+Release:        11%{?dist}
 Summary:        Python modules for writing games
 
 Group:          Development/Languages
@@ -16,6 +16,7 @@ Patch2:         pygame-1.9.1-no-test-install.patch
 # patch backported from upstream repository, V4L has been remove in linux-2.6.38
 # http://svn.seul.org/viewcvs/viewvc.cgi?view=rev&root=PyGame&revision=3077
 Patch3:         pygame-remove-v4l.patch
+Patch4:         pygame-png-leak.patch
 Source0:        http://pygame.org/ftp/%{name}-%{version}release.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -52,6 +53,7 @@ pygame.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 # rpmlint fixes
 find examples/ -type f -print0 | xargs -0 chmod -x 
@@ -109,6 +111,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Dec 04 2012 Jan Kaluza <jkaluza@redhat.com> - 1.9.1-11
+- fix #881545 - fix memory leak when saving png images
+
 * Mon Jul 30 2012 Jon Ciesla <limburgher@gmail.com> - 1.9.1-10
 - Use system font, BZ 477444.
 
