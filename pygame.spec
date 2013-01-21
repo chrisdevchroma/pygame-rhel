@@ -2,7 +2,7 @@
 
 Name:           pygame
 Version:        1.9.1
-Release:        11%{?dist}
+Release:        12%{?dist}
 Summary:        Python modules for writing games
 
 Group:          Development/Languages
@@ -111,6 +111,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Jan 21 2013 Adam Tkac <atkac redhat com> - 1.9.1-12
+- rebuild due to "jpeg8-ABI" feature drop
+
 * Tue Dec 04 2012 Jan Kaluza <jkaluza@redhat.com> - 1.9.1-11
 - fix #881545 - fix memory leak when saving png images
 
