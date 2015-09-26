@@ -2,7 +2,7 @@
 
 Name:           pygame
 Version:        1.9.1
-Release:        17%{?dist}
+Release:        18%{?dist}.20150926
 Summary:        Python modules for writing games
 
 Group:          Development/Languages
@@ -11,16 +11,19 @@ URL:            http://www.pygame.org
 #Patch0:         %{name}-1.8.1-config.patch
 Patch0:         %{name}-1.9.1-config.patch
 # porttime is part of libportmidi.so, there's no libporttime in Fedora
-Patch1:         pygame-1.9.1-porttime.patch
-Patch2:         pygame-1.9.1-no-test-install.patch
+#Patch1:         pygame-1.9.1-porttime.patch
+#Patch2:         pygame-1.9.1-no-test-install.patch
 # patch backported from upstream repository, V4L has been remove in linux-2.6.38
 # http://svn.seul.org/viewcvs/viewvc.cgi?view=rev&root=PyGame&revision=3077
-Patch3:         pygame-remove-v4l.patch
-Patch4:         pygame-png-leak.patch
-Source0:        http://pygame.org/ftp/%{name}-%{version}release.tar.gz
+#Patch3:         pygame-remove-v4l.patch
+#Patch4:         pygame-png-leak.patch
+Patch5:          pygame-config.patch
+#Source0:        http://pygame.org/ftp/%{name}-%{version}release.tar.gz
+#hg checkout for python3 support.
+Source0:        pygame-20150926.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:  python-devel numpy
+BuildRequires:  python-devel numpy python3-devel python3-numpy
 BuildRequires:  SDL_ttf-devel SDL_image-devel SDL_mixer-devel
 BuildRequires:  SDL-devel
 BuildRequires:  libpng-devel libjpeg-devel libX11-devel
@@ -45,21 +48,34 @@ Requires:       python-devel
 This package contains headers required to build applications that use
 pygame.
 
+%package -n python3-pygame
+Summary:        %{sum}
+%{?python_provide:%python_provide python3-pygame}
+
+%description -n python3-pygame
+Pygame is a set of Python modules designed for writing games. It is
+written on top of the excellent SDL library. This allows you to create
+fully featured games and multimedia programs in the python language.
+Pygame is highly portable and runs on nearly every platform and
+operating system.
+
 
 %prep
-%setup -qn %{name}-%{version}release
+#%setup -qn %{name}-%{version}release
+%setup -qn pygame-20150926
 
 %patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
+#%patch1 -p1
+#%patch2 -p1
+#%patch3 -p1
+#%patch4 -p1
+%patch5 -p0
 
 # rpmlint fixes
 find examples/ -type f -print0 | xargs -0 chmod -x 
 find docs/ -type f -print0 | xargs -0 chmod -x
 find src/ -type f -name '*.h' -print0 | xargs -0 chmod -x
-chmod -x README.txt WHATSNEW
+#chmod -x README.txt WHATSNEW
 
 iconv -f iso8859-1 -t utf-8 WHATSNEW > WHATSNEW.conv && mv -f WHATSNEW.conv WHATSNEW
 iconv -f iso8859-1 -t utf-8 README.txt > README.txt.conv && mv -f README.txt.conv README.txt
@@ -71,26 +87,36 @@ rm -f src/ffmovie.[ch]
 
 
 %build
-CFLAGS="$RPM_OPT_FLAGS" %{__python} setup.py build
+%configure
+%py2_build
+%py3_build
 
 
 %install
 rm -rf $RPM_BUILD_ROOT
-%{__python} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
+%py2_install
+%py3_install
 
 #use system font.
-rm -f $RPM_BUILD_ROOT%{python_sitearch}/%{name}/freesansbold.ttf
-ln -s /usr/share/fonts/gnu-free/FreeSansBold.ttf $RPM_BUILD_ROOT%{python_sitearch}/%{name}/freesansbold.ttf
+rm -f $RPM_BUILD_ROOT%{python2_sitearch}/%{name}/freesansbold.ttf
+ln -s /usr/share/fonts/gnu-free/FreeSansBold.ttf $RPM_BUILD_ROOT%{python2_sitearch}/%{name}/freesansbold.ttf
+rm -f $RPM_BUILD_ROOT%{python3_sitearch}/%{name}/freesansbold.ttf
+ln -s /usr/share/fonts/gnu-free/FreeSansBold.ttf $RPM_BUILD_ROOT%{python3_sitearch}/%{name}/freesansbold.ttf
 
 # Fix permissions
-chmod 755 $RPM_BUILD_ROOT%{python_sitearch}/%{name}/*.so
+chmod 755 $RPM_BUILD_ROOT%{python2_sitearch}/%{name}/*.so
+chmod 755 $RPM_BUILD_ROOT%{python3_sitearch}/%{name}/*.so
 
+#find $RPM_BUILD_ROOT%{python3_sitearch}/ -type f -name '*.py' | xargs 2to3 -wn
 
 %check
 # base_test fails in mock, unable to find soundcard
-PYTHONPATH="$RPM_BUILD_ROOT%{python_sitearch}" %{__python} test/base_test.py || :
-PYTHONPATH="$RPM_BUILD_ROOT%{python_sitearch}" %{__python} test/image_test.py
-PYTHONPATH="$RPM_BUILD_ROOT%{python_sitearch}" %{__python} test/rect_test.py
+PYTHONPATH="$RPM_BUILD_ROOT%{python2_sitearch}" %{__python2} test/base_test.py || :
+PYTHONPATH="$RPM_BUILD_ROOT%{python2_sitearch}" %{__python2} test/image_test.py
+PYTHONPATH="$RPM_BUILD_ROOT%{python2_sitearch}" %{__python2} test/rect_test.py
+PYTHONPATH="$RPM_BUILD_ROOT%{python3_sitearch}" %{__python3} test/base_test.py || :
+PYTHONPATH="$RPM_BUILD_ROOT%{python3_sitearch}" %{__python3} test/image_test.py
+PYTHONPATH="$RPM_BUILD_ROOT%{python3_sitearch}" %{__python3} test/rect_test.py
  
 
 %clean
@@ -99,9 +125,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%doc docs/ README.txt WHATSNEW
-%dir %{python_sitearch}/%{name}
-%{python_sitearch}/%{name}*
+%doc docs/ readme* WHATSNEW
+%dir %{python2_sitearch}/%{name}
+%{python2_sitearch}/%{name}*
 
 %files devel
 %defattr(-,root,root,-)
@@ -109,8 +135,17 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_includedir}/python*/%{name}
 %{_includedir}/python*/%{name}/*.h
 
+%files -n python3-pygame
+%defattr(-,root,root,-)
+%doc docs/ readme* WHATSNEW
+%dir %{python3_sitearch}/%{name}
+%{python3_sitearch}/%{name}*
+
 
 %changelog
+* Sat Sep 26 2015 Jon Ciesla <limburgher@gmail.com> - 1.9.1-18.20150926
+- Add python3 support.
+
 * Thu Jun 18 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.9.1-17
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
 
