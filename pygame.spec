@@ -2,7 +2,7 @@
 
 Name:           pygame
 Version:        1.9.1
-Release:        18%{?dist}.20150926
+Release:        19%{?dist}.20150926
 Summary:        Python modules for writing games
 
 Group:          Development/Languages
@@ -28,7 +28,7 @@ BuildRequires:  SDL_ttf-devel SDL_image-devel SDL_mixer-devel
 BuildRequires:  SDL-devel
 BuildRequires:  libpng-devel libjpeg-devel libX11-devel
 BuildRequires:  portmidi-devel
-Requires:       numpy gnu-free-sans-fonts
+Requires:       numpy gnu-free-sans-fonts python3-numpy
 
 %description
 Pygame is a set of Python modules designed for writing games. It is
@@ -143,6 +143,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Sep 26 2015 Jon Ciesla <limburgher@gmail.com> - 1.9.1-19.20150926
+- Add python3-numpy Requires.
+
 * Sat Sep 26 2015 Jon Ciesla <limburgher@gmail.com> - 1.9.1-18.20150926
 - Add python3 support.
 
