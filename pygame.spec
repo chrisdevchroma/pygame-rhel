@@ -2,7 +2,7 @@
 
 Name:           pygame
 Version:        1.9.1
-Release:        24%{?dist}.20150926
+Release:        25%{?dist}.20150926
 Summary:        Python modules for writing games
 
 Group:          Development/Languages
@@ -144,6 +144,9 @@ PYTHONPATH="$RPM_BUILD_ROOT%{python3_sitearch}" %{__python3} test/rect_test.py
 
 
 %changelog
+* Thu Dec 22 2016 Miro Hrončok <mhroncok@redhat.com> - 1.9.1-25.20150926
+- Rebuild for Python 3.6
+
 * Tue Nov 08 2016 Hans de Goede <hdegoede@redhat.com> - 1.9.1-24.20150926
 - Ignore image_test.py result on ppc64le to avoid build failure (rhbz#1392465)
 
