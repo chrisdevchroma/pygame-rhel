@@ -2,7 +2,7 @@
 
 Name:           pygame
 Version:        1.9.1
-Release:        25%{?dist}.20150926
+Release:        26%{?dist}.20150926
 Summary:        Python modules for writing games
 
 Group:          Development/Languages
@@ -144,6 +144,9 @@ PYTHONPATH="$RPM_BUILD_ROOT%{python3_sitearch}" %{__python3} test/rect_test.py
 
 
 %changelog
+* Sat Feb 11 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.1-26.20150926
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
+
 * Thu Dec 22 2016 Miro Hrončok <mhroncok@redhat.com> - 1.9.1-25.20150926
 - Rebuild for Python 3.6
 
