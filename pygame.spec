@@ -2,7 +2,7 @@
 
 Name:           pygame
 Version:        1.9.1
-Release:        26%{?dist}.20150926
+Release:        27%{?dist}.20150926
 Summary:        Python modules for writing games
 
 Group:          Development/Languages
@@ -48,7 +48,7 @@ This package contains headers required to build applications that use
 pygame.
 
 %package -n python3-pygame
-Summary:        %{sum}
+Summary:        Python3 modules for writing games
 %{?python_provide:%python_provide python3-pygame}
 
 %description -n python3-pygame
@@ -144,6 +144,9 @@ PYTHONPATH="$RPM_BUILD_ROOT%{python3_sitearch}" %{__python3} test/rect_test.py
 
 
 %changelog
+* Sat Apr 08 2017 Till Maas <opensource@till.name> - 1.9.1-27.20150926
+- Fix Summary of python 3 package (#1282034)
+
 * Sat Feb 11 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.1-26.20150926
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
 
