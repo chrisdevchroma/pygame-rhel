@@ -1,30 +1,17 @@
-%{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
-
 Name:           pygame
-Version:        1.9.1
-Release:        27%{?dist}.20150926
+Version:        1.9.3
+Release:        1%{?dist}
 Summary:        Python modules for writing games
 
-Group:          Development/Languages
 License:        LGPLv2+
 URL:            http://www.pygame.org
-#Patch0:         %{name}-1.8.1-config.patch
 Patch0:         %{name}-1.9.1-config.patch
-# porttime is part of libportmidi.so, there's no libporttime in Fedora
-#Patch1:         pygame-1.9.1-porttime.patch
-#Patch2:         pygame-1.9.1-no-test-install.patch
-# patch backported from upstream repository, V4L has been remove in linux-2.6.38
-# http://svn.seul.org/viewcvs/viewvc.cgi?view=rev&root=PyGame&revision=3077
-#Patch3:         pygame-remove-v4l.patch
-#Patch4:         pygame-png-leak.patch
 Patch5:          pygame-config.patch
-#Source0:        http://pygame.org/ftp/%{name}-%{version}release.tar.gz
-#hg checkout for python3 support.
-Source0:        pygame-20150926.tar.bz2
+Source0:	https://files.pythonhosted.org/packages/source/e/pygame/pygame-%{version}.tar.gz
 
-BuildRequires:  python-devel numpy python3-devel python3-numpy
+BuildRequires:  python2-devel numpy python3-devel python3-numpy
 BuildRequires:  SDL_ttf-devel SDL_image-devel SDL_mixer-devel
-BuildRequires:  SDL-devel
+BuildRequires:  SDL-devel freetype-devel
 BuildRequires:  libpng-devel libjpeg-devel libX11-devel
 BuildRequires:  portmidi-devel
 Requires:       numpy gnu-free-sans-fonts python3-numpy
@@ -38,10 +25,9 @@ operating system.
 
 %package devel
 Summary:        Files needed for developing programs which use pygame
-Group:          Development/Libraries
 Requires:       %{name} = %{version}-%{release}
 Requires:       SDL_ttf-devel SDL_mixer-devel
-Requires:       python-devel
+Requires:       python2-devel
 
 %description devel
 This package contains headers required to build applications that use
@@ -60,21 +46,15 @@ operating system.
 
 
 %prep
-#%setup -qn %{name}-%{version}release
-%setup -qn pygame-20150926
+%setup -q
 
 %patch0 -p1
-#%patch1 -p1
-#%patch2 -p1
-#%patch3 -p1
-#%patch4 -p1
 %patch5 -p0
 
 # rpmlint fixes
 find examples/ -type f -print0 | xargs -0 chmod -x 
 find docs/ -type f -print0 | xargs -0 chmod -x
 find src/ -type f -name '*.h' -print0 | xargs -0 chmod -x
-#chmod -x README.txt WHATSNEW
 
 iconv -f iso8859-1 -t utf-8 WHATSNEW > WHATSNEW.conv && mv -f WHATSNEW.conv WHATSNEW
 iconv -f iso8859-1 -t utf-8 README.txt > README.txt.conv && mv -f README.txt.conv README.txt
@@ -86,7 +66,6 @@ rm -f src/ffmovie.[ch]
 
 
 %build
-%configure
 %py2_build
 %py3_build
 
@@ -104,8 +83,6 @@ ln -s /usr/share/fonts/gnu-free/FreeSansBold.ttf $RPM_BUILD_ROOT%{python3_sitear
 # Fix permissions
 chmod 755 $RPM_BUILD_ROOT%{python2_sitearch}/%{name}/*.so
 chmod 755 $RPM_BUILD_ROOT%{python3_sitearch}/%{name}/*.so
-
-#find $RPM_BUILD_ROOT%{python3_sitearch}/ -type f -name '*.py' | xargs 2to3 -wn
 
 %check
 # base_test fails in mock, unable to find soundcard
@@ -144,6 +121,9 @@ PYTHONPATH="$RPM_BUILD_ROOT%{python3_sitearch}" %{__python3} test/rect_test.py
 
 
 %changelog
+* Mon Apr 10 2017 Gwyn Ciesla <limburgher@gmail.com> - 1.9.3-1
+- 1.9.3, some minor cleanup.
+
 * Sat Apr 08 2017 Till Maas <opensource@till.name> - 1.9.1-27.20150926
 - Fix Summary of python 3 package (#1282034)
 

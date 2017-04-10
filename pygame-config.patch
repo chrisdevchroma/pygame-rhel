@@ -1,11 +1,11 @@
---- config_unix.py~	2015-09-26 12:33:29.000000000 -0500
-+++ config_unix.py	2015-09-26 12:34:19.410401385 -0500
+--- config_unix.py~	2017-04-10 09:03:23.000000000 -0500
++++ config_unix.py	2017-04-10 09:04:47.995589474 -0500
 @@ -21,7 +21,7 @@
- if 'ORIGLIBDIRS' in os.environ and os.environ['ORIGLIBDIRS'] != "":
      origlibdirs = os.environ['ORIGLIBDIRS'].split(":")
  
--    return 1
-+#    return 1
  
+-    return 1
++    #return 1
  def confirm(message):
      "ask a yes/no question, return result"
+     if not sys.stdout.isatty():
