@@ -1,6 +1,6 @@
 Name:           pygame
 Version:        1.9.3
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Python modules for writing games
 
 License:        LGPLv2+
@@ -14,14 +14,25 @@ BuildRequires:  SDL_ttf-devel SDL_image-devel SDL_mixer-devel
 BuildRequires:  SDL-devel freetype-devel
 BuildRequires:  libpng-devel libjpeg-devel libX11-devel
 BuildRequires:  portmidi-devel
-Requires:       numpy gnu-free-sans-fonts python3-numpy
 
-%description
-Pygame is a set of Python modules designed for writing games. It is
-written on top of the excellent SDL library. This allows you to create
-fully featured games and multimedia programs in the python language.
-Pygame is highly portable and runs on nearly every platform and
+%global _description\
+Pygame is a set of Python modules designed for writing games. It is\
+written on top of the excellent SDL library. This allows you to create\
+fully featured games and multimedia programs in the python language.\
+Pygame is highly portable and runs on nearly every platform and\
 operating system.
+
+%description %_description
+
+%package -n python2-pygame
+Summary: %summary
+Requires:       numpy gnu-free-sans-fonts python3-numpy
+%{?python_provide:%python_provide python2-pygame}
+# Remove before F30
+Provides: pygame%{?_isa} = %{version}-%{release}
+Obsoletes: pygame < %{version}-%{release}
+
+%description -n python2-pygame %_description
 
 %package devel
 Summary:        Files needed for developing programs which use pygame
@@ -104,7 +115,7 @@ PYTHONPATH="$RPM_BUILD_ROOT%{python3_sitearch}" %{__python3} test/image_test.py
 PYTHONPATH="$RPM_BUILD_ROOT%{python3_sitearch}" %{__python3} test/rect_test.py
  
 
-%files
+%files -n python2-pygame
 %doc docs/ readme* WHATSNEW
 %dir %{python2_sitearch}/%{name}
 %{python2_sitearch}/%{name}*
@@ -121,6 +132,10 @@ PYTHONPATH="$RPM_BUILD_ROOT%{python3_sitearch}" %{__python3} test/rect_test.py
 
 
 %changelog
+* Sat Aug 19 2017 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 1.9.3-4
+- Python 2 binary package renamed to python2-pygame
+  See https://fedoraproject.org/wiki/FinalizingFedoraSwitchtoPython3
+
 * Thu Aug 03 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.3-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Binutils_Mass_Rebuild
 
