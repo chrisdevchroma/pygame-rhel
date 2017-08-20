@@ -1,6 +1,6 @@
 Name:           pygame
 Version:        1.9.3
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Python modules for writing games
 
 License:        LGPLv2+
@@ -29,6 +29,7 @@ Summary: %summary
 Requires:       numpy gnu-free-sans-fonts python3-numpy
 %{?python_provide:%python_provide python2-pygame}
 # Remove before F30
+Provides: pygame = %{version}-%{release}
 Provides: pygame%{?_isa} = %{version}-%{release}
 Obsoletes: pygame < %{version}-%{release}
 
@@ -132,6 +133,9 @@ PYTHONPATH="$RPM_BUILD_ROOT%{python3_sitearch}" %{__python3} test/rect_test.py
 
 
 %changelog
+* Sun Aug 20 2017 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 1.9.3-5
+- Add Provides for the old name without %%_isa
+
 * Sat Aug 19 2017 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 1.9.3-4
 - Python 2 binary package renamed to python2-pygame
   See https://fedoraproject.org/wiki/FinalizingFedoraSwitchtoPython3
