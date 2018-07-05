@@ -1,0 +1,13 @@
+diff --git a/src/pypm.pyx b/src/pypm.pyx
+index a3ab729..d66e7a1 100644
+--- a/src/pypm.pyx
++++ b/src/pypm.pyx
+@@ -690,7 +690,7 @@ cdef class Input:
+ 
+         events = []
+         if num_events >= 1:
+-            for ev_no in range(num_events):
++            for ev_no in range(<int>num_events):
+                 events.append(
+                     [
+                         [

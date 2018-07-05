@@ -6,10 +6,13 @@ Summary:        Python modules for writing games
 License:        LGPLv2+
 URL:            http://www.pygame.org
 Patch0:         %{name}-1.9.1-config.patch
+# https://github.com/pygame/pygame/pull/345
+Patch1:         %{name}-1.9.3-cython28.patch
 Patch5:          pygame-config.patch
 Source0:	https://files.pythonhosted.org/packages/source/e/pygame/pygame-%{version}.tar.gz
 
-BuildRequires:  python2-devel numpy python3-devel python3-numpy
+BuildRequires:  python2-devel python2-numpy
+BuildRequires:  python3-devel python3-numpy python3-Cython
 BuildRequires:  SDL_ttf-devel SDL_image-devel SDL_mixer-devel
 BuildRequires:  SDL-devel freetype-devel
 BuildRequires:  libpng-devel libjpeg-devel libX11-devel
@@ -61,7 +64,12 @@ operating system.
 %setup -q
 
 %patch0 -p1
+%patch1 -p1
 %patch5 -p0
+
+# cythonize it
+rm src/pypm.c
+%{__python3} -m cython src/pypm.pyx
 
 # rpmlint fixes
 find examples/ -type f -print0 | xargs -0 chmod -x 
@@ -135,6 +143,7 @@ PYTHONPATH="$RPM_BUILD_ROOT%{python3_sitearch}" %{__python3} test/rect_test.py
 %changelog
 * Tue Jun 19 2018 Miro Hrončok <mhroncok@redhat.com> - 1.9.3-7
 - Rebuilt for Python 3.7
+- Regenerate Cython C file, apply upstream patch for new Cython
 
 * Fri Feb 09 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.3-6
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
