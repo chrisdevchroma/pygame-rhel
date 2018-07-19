@@ -1,14 +1,10 @@
 Name:           pygame
-Version:        1.9.3
-Release:        8%{?dist}
+Version:        1.9.4
+Release:        1%{?dist}
 Summary:        Python modules for writing games
 
 License:        LGPLv2+
 URL:            http://www.pygame.org
-Patch0:         %{name}-1.9.1-config.patch
-# https://github.com/pygame/pygame/pull/345
-Patch1:         %{name}-1.9.3-cython28.patch
-Patch5:          pygame-config.patch
 Source0:	https://files.pythonhosted.org/packages/source/e/pygame/pygame-%{version}.tar.gz
 
 BuildRequires:  python2-devel python2-numpy
@@ -62,10 +58,6 @@ operating system.
 
 %prep
 %setup -q
-
-%patch0 -p1
-%patch1 -p1
-%patch5 -p0
 
 # cythonize it
 rm src/pypm.c
@@ -141,6 +133,9 @@ PYTHONPATH="$RPM_BUILD_ROOT%{python3_sitearch}" %{__python3} test/rect_test.py
 
 
 %changelog
+* Thu Jul 19 2018 Gwyn Ciesla <limburgher@gmail.com> - 1.9.4-1
+- 1.9.4.
+
 * Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.3-8
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
 
