@@ -1,6 +1,6 @@
 Name:           pygame
 Version:        1.9.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Python modules for writing games
 
 License:        LGPLv2+
@@ -13,6 +13,7 @@ BuildRequires:  SDL_ttf-devel SDL_image-devel SDL_mixer-devel
 BuildRequires:  SDL-devel freetype-devel
 BuildRequires:  libpng-devel libjpeg-devel libX11-devel
 BuildRequires:  portmidi-devel
+BuildRequires:  gcc
 
 %global _description\
 Pygame is a set of Python modules designed for writing games. It is\
@@ -133,6 +134,9 @@ PYTHONPATH="$RPM_BUILD_ROOT%{python3_sitearch}" %{__python3} test/rect_test.py
 
 
 %changelog
+* Fri Jul 20 2018 Gwyn Ciesla <limburgher@gmail.com> - 1.9.4-2
+- BR fix.
+
 * Thu Jul 19 2018 Gwyn Ciesla <limburgher@gmail.com> - 1.9.4-1
 - 1.9.4.
 
