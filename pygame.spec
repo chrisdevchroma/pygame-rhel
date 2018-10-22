@@ -1,6 +1,6 @@
 Name:           pygame
 Version:        1.9.4
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Python modules for writing games
 
 License:        LGPLv2+
@@ -28,6 +28,7 @@ operating system.
 Summary: %summary
 Requires:       gnu-free-sans-fonts python2-numpy
 %{?python_provide:%python_provide python2-pygame}
+Provides:     pygame
 
 %description -n python2-pygame %_description
 
@@ -131,6 +132,9 @@ PYTHONPATH="$RPM_BUILD_ROOT%{python3_sitearch}" %{__python3} test/rect_test.py
 
 
 %changelog
+* Mon Oct 22 2018 Gwyn Ciesla <limburgher@gmail.com> - 1.9.4-4
+- Requires fixes.
+
 * Thu Oct 04 2018 Gwyn Ciesla <limburgher@gmail.com> - 1.9.4-3
 - Requires fixes.
 
