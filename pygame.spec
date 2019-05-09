@@ -99,20 +99,10 @@ chmod 755 $RPM_BUILD_ROOT%{python3_sitearch}/%{name}/*.so
 %check
 # base_test fails in mock, unable to find soundcard
 PYTHONPATH="$RPM_BUILD_ROOT%{python2_sitearch}" %{__python2} test/base_test.py || :
-# image_test has a single test fail on ppc64le, ignore for now (rhbz#1392465)
-%ifarch ppc64le
-PYTHONPATH="$RPM_BUILD_ROOT%{python2_sitearch}" %{__python2} test/image_test.py || :
-%else
 PYTHONPATH="$RPM_BUILD_ROOT%{python2_sitearch}" %{__python2} test/image_test.py
-%endif
 PYTHONPATH="$RPM_BUILD_ROOT%{python2_sitearch}" %{__python2} test/rect_test.py
 PYTHONPATH="$RPM_BUILD_ROOT%{python3_sitearch}" %{__python3} test/base_test.py || :
-# image_test has a single test fail on ppc64le, ignore for now (rhbz#1392465)
-%ifarch ppc64le
-PYTHONPATH="$RPM_BUILD_ROOT%{python3_sitearch}" %{__python3} test/image_test.py || :
-%else
 PYTHONPATH="$RPM_BUILD_ROOT%{python3_sitearch}" %{__python3} test/image_test.py
-%endif
 PYTHONPATH="$RPM_BUILD_ROOT%{python3_sitearch}" %{__python3} test/rect_test.py
  
 
@@ -135,6 +125,7 @@ PYTHONPATH="$RPM_BUILD_ROOT%{python3_sitearch}" %{__python3} test/rect_test.py
 %changelog
 * Thu May 09 2019 Sérgio Basto <sergio@serjux.com> - 1.9.4-6
 - Allow build on EPEL7
+- Re-enable tests on ppc64le (#1520016)
 
 * Sat Feb 02 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.4-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
