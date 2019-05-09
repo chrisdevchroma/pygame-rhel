@@ -1,6 +1,6 @@
 Name:           pygame
 Version:        1.9.4
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Python modules for writing games
 
 License:        LGPLv2+
@@ -8,7 +8,8 @@ URL:            http://www.pygame.org
 Source0:	https://files.pythonhosted.org/packages/source/e/pygame/pygame-%{version}.tar.gz
 
 BuildRequires:  python2-devel python2-numpy
-BuildRequires:  python3-devel python3-numpy python3-Cython
+BuildRequires:  python%{python3_pkgversion}-devel python%{python3_pkgversion}-numpy python%{python3_pkgversion}-Cython
+BuildRequires:  python%{python3_pkgversion}-setuptools
 BuildRequires:  SDL_ttf-devel SDL_image-devel SDL_mixer-devel
 BuildRequires:  SDL-devel freetype-devel
 BuildRequires:  libpng-devel libjpeg-devel libX11-devel
@@ -42,12 +43,12 @@ Requires:       python2-devel
 This package contains headers required to build applications that use
 pygame.
 
-%package -n python3-pygame
+%package -n python%{python3_pkgversion}-pygame
 Summary:        Python3 modules for writing games
 Requires:       gnu-free-sans-fonts python3-numpy
-%{?python_provide:%python_provide python3-pygame}
+%{?python_provide:%python_provide python%{python3_pkgversion}-pygame}
 
-%description -n python3-pygame
+%description -n python%{python3_pkgversion}-pygame
 Pygame is a set of Python modules designed for writing games. It is
 written on top of the excellent SDL library. This allows you to create
 fully featured games and multimedia programs in the python language.
@@ -125,13 +126,16 @@ PYTHONPATH="$RPM_BUILD_ROOT%{python3_sitearch}" %{__python3} test/rect_test.py
 %dir %{_includedir}/python*/%{name}
 %{_includedir}/python*/%{name}/*.h
 
-%files -n python3-pygame
+%files -n python%{python3_pkgversion}-pygame
 %doc docs/ readme* WHATSNEW
 %dir %{python3_sitearch}/%{name}
 %{python3_sitearch}/%{name}*
 
 
 %changelog
+* Thu May 09 2019 Sérgio Basto <sergio@serjux.com> - 1.9.4-6
+- Allow build on EPEL7
+
 * Sat Feb 02 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.4-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
 
