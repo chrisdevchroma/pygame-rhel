@@ -1,6 +1,6 @@
 Name:           pygame
 Version:        1.9.4
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Python modules for writing games
 
 License:        LGPLv2+
@@ -45,7 +45,7 @@ pygame.
 
 %package -n python%{python3_pkgversion}-pygame
 Summary:        Python3 modules for writing games
-Requires:       gnu-free-sans-fonts python3-numpy
+Requires:       gnu-free-sans-fonts python%{python3_pkgversion}-numpy
 %{?python_provide:%python_provide python%{python3_pkgversion}-pygame}
 
 %description -n python%{python3_pkgversion}-pygame
@@ -123,6 +123,9 @@ PYTHONPATH="$RPM_BUILD_ROOT%{python3_sitearch}" %{__python3} test/rect_test.py
 
 
 %changelog
+* Fri May 10 2019 Sérgio Basto <sergio@serjux.com> - 1.9.4-7
+- Fix one missing %%{python3_pkgversion}
+
 * Thu May 09 2019 Sérgio Basto <sergio@serjux.com> - 1.9.4-6
 - Allow build on EPEL7
 - Re-enable tests on ppc64le (#1520016)
