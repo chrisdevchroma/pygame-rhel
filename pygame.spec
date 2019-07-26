@@ -1,6 +1,6 @@
 Name:           pygame
 Version:        1.9.4
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        Python modules for writing games
 
 License:        LGPLv2+
@@ -123,6 +123,9 @@ PYTHONPATH="$RPM_BUILD_ROOT%{python3_sitearch}" %{__python3} test/rect_test.py
 
 
 %changelog
+* Fri Jul 26 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.4-8
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
+
 * Fri May 10 2019 Sérgio Basto <sergio@serjux.com> - 1.9.4-7
 - Fix one missing %%{python3_pkgversion}
 
