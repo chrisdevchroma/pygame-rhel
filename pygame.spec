@@ -1,6 +1,6 @@
 Name:           pygame
 Version:        1.9.4
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        Python modules for writing games
 
 License:        LGPLv2+
@@ -37,7 +37,7 @@ Provides:     pygame
 Summary:        Files needed for developing programs which use pygame
 Requires:       %{name} = %{version}-%{release}
 Requires:       SDL_ttf-devel SDL_mixer-devel
-Requires:       python2-devel
+Requires:       python3-devel
 
 %description devel
 This package contains headers required to build applications that use
@@ -123,6 +123,9 @@ PYTHONPATH="$RPM_BUILD_ROOT%{python3_sitearch}" %{__python3} test/rect_test.py
 
 
 %changelog
+* Wed Aug 07 2019 Gwyn Ciesla <gwync@protonmail.com> - 1.9.4-9
+- Mode -devel to Python 3.
+
 * Fri Jul 26 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.4-8
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
