@@ -1,6 +1,6 @@
 Name:           pygame
 Version:        1.9.6
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Python modules for writing games
 
 License:        LGPLv2+
@@ -123,6 +123,9 @@ PYTHONPATH="$RPM_BUILD_ROOT%{python3_sitearch}" %{__python3} test/rect_test.py
 
 
 %changelog
+* Mon Aug 19 2019 Miro Hrončok <mhroncok@redhat.com> - 1.9.6-2
+- Rebuilt for Python 3.8
+
 * Thu Aug 08 2019 Gwyn Ciesla <gwync@protonmail.com> - 1.9.6-1
 - 1.9.6
 
