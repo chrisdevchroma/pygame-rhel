@@ -1,6 +1,6 @@
 Name:           pygame
 Version:        1.9.6
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Python modules for writing games
 
 License:        LGPLv2+
@@ -27,7 +27,8 @@ operating system.
 
 %package -n python2-pygame
 Summary: %summary
-Requires:       gnu-free-sans-fonts python2-numpy
+Requires:       gnu-free-sans-fonts
+Recommends:     python2-numpy
 %{?python_provide:%python_provide python2-pygame}
 Provides:     pygame
 
@@ -45,7 +46,8 @@ pygame.
 
 %package -n python%{python3_pkgversion}-pygame
 Summary:        Python3 modules for writing games
-Requires:       gnu-free-sans-fonts python%{python3_pkgversion}-numpy
+Requires:       gnu-free-sans-fonts
+Recommends:     python%{python3_pkgversion}-numpy
 %{?python_provide:%python_provide python%{python3_pkgversion}-pygame}
 
 %description -n python%{python3_pkgversion}-pygame
@@ -123,6 +125,12 @@ PYTHONPATH="$RPM_BUILD_ROOT%{python3_sitearch}" %{__python3} test/rect_test.py
 
 
 %changelog
+* Tue Oct 29 2019 Petr Viktorin <pviktori@redhat.com> - 1.9.6-4
+- Only Recommend NumPy
+  The only part of pygame that needs NumPy is pygame.surfarray,
+  but pygame is otherwise useful without it.
+  See: https://www.pygame.org/docs/ref/surfarray.html
+
 * Thu Oct 03 2019 Miro Hrončok <mhroncok@redhat.com> - 1.9.6-3
 - Rebuilt for Python 3.8.0rc1 (#1748018)
 
