@@ -1,13 +1,12 @@
 Name:           pygame
 Version:        1.9.6
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Python modules for writing games
 
 License:        LGPLv2+
 URL:            http://www.pygame.org
 Source0:	https://files.pythonhosted.org/packages/source/e/pygame/pygame-%{version}.tar.gz
 
-BuildRequires:  python2-devel python2-numpy
 BuildRequires:  python%{python3_pkgversion}-devel python%{python3_pkgversion}-numpy python%{python3_pkgversion}-Cython
 BuildRequires:  python%{python3_pkgversion}-setuptools
 BuildRequires:  SDL_ttf-devel SDL_image-devel SDL_mixer-devel
@@ -25,18 +24,9 @@ operating system.
 
 %description %_description
 
-%package -n python2-pygame
-Summary: %summary
-Requires:       gnu-free-sans-fonts
-Recommends:     python2-numpy
-%{?python_provide:%python_provide python2-pygame}
-Provides:     pygame
-
-%description -n python2-pygame %_description
-
 %package devel
 Summary:        Files needed for developing programs which use pygame
-Requires:       %{name} = %{version}-%{release}
+Requires:       python%{python3_pkgversion}-%{name} = %{version}-%{release}
 Requires:       SDL_ttf-devel SDL_mixer-devel
 Requires:       python3-devel
 
@@ -80,51 +70,40 @@ rm -f src_c/ffmovie.[ch]
 
 
 %build
-%py2_build
 %py3_build
 
 
 %install
-%py2_install
 %py3_install
 
 #use system font.
-rm -f $RPM_BUILD_ROOT%{python2_sitearch}/%{name}/freesansbold.ttf
-ln -s /usr/share/fonts/gnu-free/FreeSansBold.ttf $RPM_BUILD_ROOT%{python2_sitearch}/%{name}/freesansbold.ttf
 rm -f $RPM_BUILD_ROOT%{python3_sitearch}/%{name}/freesansbold.ttf
 ln -s /usr/share/fonts/gnu-free/FreeSansBold.ttf $RPM_BUILD_ROOT%{python3_sitearch}/%{name}/freesansbold.ttf
 
 # Fix permissions
-chmod 755 $RPM_BUILD_ROOT%{python2_sitearch}/%{name}/*.so
 chmod 755 $RPM_BUILD_ROOT%{python3_sitearch}/%{name}/*.so
 
 %check
 # base_test fails in mock, unable to find soundcard
-#PYTHONPATH="$RPM_BUILD_ROOT%{python2_sitearch}" %{__python2} test/base_test.py || :
-#PYTHONPATH="$RPM_BUILD_ROOT%{python2_sitearch}" %{__python2} test/image_test.py
-PYTHONPATH="$RPM_BUILD_ROOT%{python2_sitearch}" %{__python2} test/rect_test.py
 PYTHONPATH="$RPM_BUILD_ROOT%{python3_sitearch}" %{__python3} test/base_test.py || :
 PYTHONPATH="$RPM_BUILD_ROOT%{python3_sitearch}" %{__python3} test/image_test.py
 PYTHONPATH="$RPM_BUILD_ROOT%{python3_sitearch}" %{__python3} test/rect_test.py
  
-
-%files -n python2-pygame
+%files -n python%{python3_pkgversion}-pygame
 %doc docs/ README* WHATSNEW*
-%dir %{python2_sitearch}/%{name}
-%{python2_sitearch}/%{name}*
+%dir %{python3_sitearch}/%{name}
+%{python3_sitearch}/%{name}*
 
 %files devel
 %doc examples/
 %dir %{_includedir}/python*/%{name}
 %{_includedir}/python*/%{name}/*.h
 
-%files -n python%{python3_pkgversion}-pygame
-%doc docs/ README* WHATSNEW*
-%dir %{python3_sitearch}/%{name}
-%{python3_sitearch}/%{name}*
-
 
 %changelog
+* Mon Jan 06 2020 Gwyn Ciesla <gwync@protonmail.com> - 1.9.6-5
+- Drop Python 2.
+
 * Tue Oct 29 2019 Petr Viktorin <pviktori@redhat.com> - 1.9.6-4
 - Only Recommend NumPy
   The only part of pygame that needs NumPy is pygame.surfarray,
