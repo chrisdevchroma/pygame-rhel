@@ -1,11 +1,12 @@
 Name:           pygame
 Version:        1.9.6
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Python modules for writing games
 
 License:        LGPLv2+
 URL:            http://www.pygame.org
 Source0:	https://files.pythonhosted.org/packages/source/e/pygame/pygame-%{version}.tar.gz
+Patch0:         python-39.patch
 
 BuildRequires:  python%{python3_pkgversion}-devel python%{python3_pkgversion}-numpy python%{python3_pkgversion}-Cython
 BuildRequires:  python%{python3_pkgversion}-setuptools
@@ -50,6 +51,8 @@ operating system.
 
 %prep
 %setup -q
+
+%patch0 -p0
 
 # cythonize it
 rm src_c/pypm.c
@@ -101,6 +104,9 @@ PYTHONPATH="$RPM_BUILD_ROOT%{python3_sitearch}" %{__python3} test/rect_test.py
 
 
 %changelog
+* Fri Jan 17 2020 Gwyn Ciesla <gwync@protonmail.com> - 1.9.6-6
+- Patch for python 3.9
+
 * Mon Jan 06 2020 Gwyn Ciesla <gwync@protonmail.com> - 1.9.6-5
 - Drop Python 2.
 

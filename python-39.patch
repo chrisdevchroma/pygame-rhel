@@ -1,0 +1,31 @@
+--- test/image_test.py~	2019-04-25 01:10:33.000000000 -0500
++++ test/image_test.py	2020-01-17 14:33:13.945169326 -0600
+@@ -387,7 +387,7 @@
+                 byte_buf[i*4 + 2] = byte_buf[i*4 + 1]
+                 byte_buf[i*4 + 1] = byte_buf[i*4 + 0]
+                 byte_buf[i*4 + 0] = alpha
+-            return byte_buf.tostring()
++            return byte_buf.tobytes()
+ 
+         ####################################################################
+         def RotateARGBtoRGBA(str_buf):
+@@ -399,7 +399,7 @@
+                 byte_buf[i*4 + 1] = byte_buf[i*4 + 2]
+                 byte_buf[i*4 + 2] = byte_buf[i*4 + 3]
+                 byte_buf[i*4 + 3] = alpha
+-            return byte_buf.tostring()
++            return byte_buf.tobytes()
+ 
+         ####################################################################
+         test_surface = pygame.Surface((64, 256), flags=pygame.SRCALPHA,
+--- test/test_utils/png.py~	2019-04-25 01:10:33.000000000 -0500
++++ test/test_utils/png.py	2020-01-17 15:00:20.714814225 -0600
+@@ -202,7 +202,7 @@
+     """Convert row of bytes to string.  Expects `row` to be an
+     ``array``.
+     """
+-    return row.tostring()
++    return row.tobytes()
+ 
+ # Conditionally convert to bytes.  Works on Python 2 and Python 3.
+ try:
