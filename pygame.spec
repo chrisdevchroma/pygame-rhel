@@ -5,7 +5,7 @@ Summary:        Python modules for writing games
 
 License:        LGPLv2+
 URL:            http://www.pygame.org
-Source0:	https://files.pythonhosted.org/packages/source/e/pygame/pygame-%{version}.tar.gz
+Source0:	https://github.com/pygame/pygame/releases/download/1.9.6/pygame-%{version}.tar.gz
 Patch0:         python-39.patch
 
 BuildRequires:  python%{python3_pkgversion}-devel python%{python3_pkgversion}-numpy python%{python3_pkgversion}-Cython
